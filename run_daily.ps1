@@ -19,3 +19,9 @@ Set-Location "C:\Users\benne\mlb-k-props"
 & $py main.py 2>&1 | Out-File -FilePath $log -Append -Encoding utf8
 
 "Exit code: $LASTEXITCODE" | Out-File -FilePath $log -Append -Encoding utf8
+
+# Push updated site data to GitHub
+Set-Location "C:\Users\benne\mlb-k-props"
+git add docs/data/
+git commit -m "data: $(Get-Date -Format 'yyyy-MM-dd')" 2>&1 | Out-File -FilePath $log -Append -Encoding utf8
+git push 2>&1 | Out-File -FilePath $log -Append -Encoding utf8
