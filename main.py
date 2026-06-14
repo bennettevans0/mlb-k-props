@@ -56,6 +56,7 @@ def log_picks(edges_df: pd.DataFrame, date_str: str) -> int:
             round(float(row["_edge_val"]), 4),
             row.get("Team", ""),
             row.get("Opp", ""),
+            row.get("Book", ""),
         ])
 
     PICKS_CSV.parent.mkdir(parents=True, exist_ok=True)
@@ -80,7 +81,7 @@ def log_picks(edges_df: pd.DataFrame, date_str: str) -> int:
                     f.write("\n")
         w = csv.writer(f)
         if not file_exists:
-            w.writerow(["game_date", "pitcher_name", "line", "pick", "odds", "model_projection", "edge", "team", "opp"])
+            w.writerow(["game_date", "pitcher_name", "line", "pick", "odds", "model_projection", "edge", "team", "opp", "book"])
         w.writerows(new_rows)
 
     print(f"[picks] Wrote {len(new_rows)} new row(s) to {PICKS_CSV}")
@@ -152,6 +153,7 @@ def export_site_data(edges_df: pd.DataFrame, date_str: str, n_props: int, pitchi
             pick_lookup[key] = {
                 "team": (row.get("team") or "").strip(),
                 "opp": (row.get("opp") or "").strip(),
+                "book": (row.get("book") or "").strip(),
             }
 
     picks = []
@@ -193,11 +195,13 @@ def export_site_data(edges_df: pd.DataFrame, date_str: str, n_props: int, pitchi
             pl = pick_lookup.get((date_val, pitcher_val), {})
             team = pl.get("team") or pitcher_teams.get(pitcher_val.lower(), "")
             opp = pl.get("opp", "")
+            book = pl.get("book", "")
             results.append({
                 "date": date_val,
                 "pitcher": pitcher_val,
                 "team": team,
                 "opp": opp,
+                "book": book,
                 "line": float(row.get("line") or 0),
                 "pick": (row.get("pick") or "").strip(),
                 "odds": (row.get("odds") or "").strip(),

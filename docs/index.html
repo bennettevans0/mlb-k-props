@@ -361,6 +361,7 @@
             <th>Actual K</th>
             <th>Result</th>
             <th>Units</th>
+            <th>Book</th>
           </tr>
         </thead>
         <tbody id="recent-tbody"></tbody>
@@ -398,6 +399,7 @@
             <th>Actual K</th>
             <th>Result</th>
             <th>Units</th>
+            <th>Book</th>
           </tr>
         </thead>
         <tbody id="all-tbody"></tbody>
@@ -723,6 +725,7 @@ function renderRecent() {
       <td>${r.actual_k != null ? r.actual_k : '—'}</td>
       <td><span class="badge b-${r.result}">${r.result}</span></td>
       <td>${fmtUnits(r.units)}</td>
+      <td>${r.book ? `<span class="book-tag">${r.book}</span>` : '<span class="muted">—</span>'}</td>
     </tr>`).join('');
 }
 
@@ -758,6 +761,7 @@ function renderAll() {
       <td class="muted">${r.actual_k != null ? r.actual_k : '—'}</td>
       <td><span class="badge b-${r.result}">${r.result}</span></td>
       <td>${fmtUnits(r.units)}</td>
+      <td>${r.book ? `<span class="book-tag">${r.book}</span>` : '<span class="muted">—</span>'}</td>
     </tr>`).join('');
 }
 
