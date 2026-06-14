@@ -421,8 +421,23 @@ const TEAM_COLORS = {
   TEX:{bg:'#003278',fg:'#C0111F'}, TOR:{bg:'#134A8E',fg:'#fff'}, WSN:{bg:'#AB0003',fg:'#fff'},
 };
 
+const TEAM_IDS = {
+  ARI:109, ATL:144, BAL:110, BOS:111, CHC:112, CWS:145, CIN:113, CLE:114,
+  COL:115, DET:116, HOU:117, KCR:118, LAA:108, LAD:119, MIA:146, MIL:158,
+  MIN:142, NYM:121, NYY:147, OAK:133, PHI:143, PIT:134, SDP:135, SFG:137,
+  SEA:136, STL:138, TBR:139, TEX:140, TOR:141, WSN:120,
+};
+
 function teamBadge(abbr, size = 26) {
   const c = TEAM_COLORS[abbr] || { bg: '#888', fg: '#fff' };
+  const id = TEAM_IDS[abbr];
+  if (id) {
+    return `<img src="https://www.mlbstatic.com/team-logos/${id}.svg"
+      width="${size}" height="${size}"
+      style="border-radius:50%;object-fit:contain;flex-shrink:0;background:${c.bg};padding:2px;"
+      onerror="this.outerHTML='<div class=team-badge style=width:${size}px;height:${size}px;background:${c.bg};color:${c.fg};>${abbr}</div>'"
+      alt="${abbr}">`;
+  }
   return `<div class="team-badge" style="width:${size}px;height:${size}px;background:${c.bg};color:${c.fg};">${abbr}</div>`;
 }
 
