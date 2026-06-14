@@ -479,9 +479,9 @@ let chartAllVals = [];
 async function load() {
   try {
     const [t, r, m] = await Promise.all([
-      fetch('data/today.json').then(x => x.json()).catch(() => ({ date: '', picks: [] })),
-      fetch('data/results.json').then(x => x.json()).catch(() => ({ results: [] })),
-      fetch('data/meta.json').then(x => x.json()).catch(() => ({})),
+      fetch('data/today.json?v=' + Date.now()).then(x => x.json()).catch(() => ({ date: '', picks: [] })),
+      fetch('data/results.json?v=' + Date.now()).then(x => x.json()).catch(() => ({ results: [] })),
+      fetch('data/meta.json?v=' + Date.now()).then(x => x.json()).catch(() => ({})),
     ]);
     todayPicks = t.picks || [];
     allResults = (r.results || []).filter(r => r.result);
