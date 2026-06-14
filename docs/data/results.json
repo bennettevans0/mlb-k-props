@@ -3,6 +3,8 @@
     {
       "date": "2026-06-09",
       "pitcher": "Paul Skenes",
+      "team": "PIT",
+      "opp": "",
       "line": 6.5,
       "pick": "over",
       "odds": "-110",
@@ -15,6 +17,8 @@
     {
       "date": "2026-06-09",
       "pitcher": "Paul Skenes",
+      "team": "PIT",
+      "opp": "",
       "line": 6.5,
       "pick": "over",
       "odds": "-110",
@@ -27,6 +31,8 @@
     {
       "date": "2026-06-10",
       "pitcher": "David Peterson",
+      "team": "NYM",
+      "opp": "",
       "line": 2.5,
       "pick": "over",
       "odds": "-150",
@@ -39,6 +45,8 @@
     {
       "date": "2026-06-10",
       "pitcher": "Brandon Young",
+      "team": "BAL",
+      "opp": "",
       "line": 5.5,
       "pick": "under",
       "odds": "-120",
@@ -51,6 +59,8 @@
     {
       "date": "2026-06-10",
       "pitcher": "MacKenzie Gore",
+      "team": "TEX",
+      "opp": "",
       "line": 5.5,
       "pick": "under",
       "odds": "140",
@@ -63,6 +73,8 @@
     {
       "date": "2026-06-10",
       "pitcher": "Peter Lambert",
+      "team": "HOU",
+      "opp": "",
       "line": 4.5,
       "pick": "over",
       "odds": "165",
@@ -75,6 +87,8 @@
     {
       "date": "2026-06-10",
       "pitcher": "Chris Sale",
+      "team": "ATL",
+      "opp": "",
       "line": 6.5,
       "pick": "over",
       "odds": "-103",
@@ -87,6 +101,8 @@
     {
       "date": "2026-06-10",
       "pitcher": "Shota Imanaga",
+      "team": "CHC",
+      "opp": "",
       "line": 5.5,
       "pick": "over",
       "odds": "225",
@@ -99,6 +115,8 @@
     {
       "date": "2026-06-10",
       "pitcher": "Seth Lugo",
+      "team": "KCR",
+      "opp": "",
       "line": 4.5,
       "pick": "over",
       "odds": "119",
@@ -111,6 +129,8 @@
     {
       "date": "2026-06-10",
       "pitcher": "Mitch Keller",
+      "team": "PIT",
+      "opp": "",
       "line": 4.5,
       "pick": "under",
       "odds": "-142",
@@ -123,6 +143,8 @@
     {
       "date": "2026-06-10",
       "pitcher": "Brandon Sproat",
+      "team": "MIL",
+      "opp": "",
       "line": 3.5,
       "pick": "over",
       "odds": "125",
@@ -135,6 +157,8 @@
     {
       "date": "2026-06-11",
       "pitcher": "Kyle Bradish",
+      "team": "BAL",
+      "opp": "",
       "line": 7.5,
       "pick": "under",
       "odds": "-130",
@@ -147,6 +171,8 @@
     {
       "date": "2026-06-11",
       "pitcher": "Justin Wrobleski",
+      "team": "LAD",
+      "opp": "",
       "line": 3.5,
       "pick": "over",
       "odds": "105",
@@ -159,6 +185,8 @@
     {
       "date": "2026-06-12",
       "pitcher": "Luinder Avila",
+      "team": "KCR",
+      "opp": "",
       "line": 3.5,
       "pick": "over",
       "odds": "100",
@@ -171,6 +199,8 @@
     {
       "date": "2026-06-12",
       "pitcher": "Bryce Miller",
+      "team": "SEA",
+      "opp": "",
       "line": 4.5,
       "pick": "over",
       "odds": "-129",
@@ -183,6 +213,8 @@
     {
       "date": "2026-06-12",
       "pitcher": "Zack Littell",
+      "team": "WSN",
+      "opp": "",
       "line": 3.5,
       "pick": "over",
       "odds": "100",
@@ -195,6 +227,8 @@
     {
       "date": "2026-06-12",
       "pitcher": "Javier Assad",
+      "team": "CHC",
+      "opp": "",
       "line": 3.5,
       "pick": "over",
       "odds": "135",
@@ -207,6 +241,8 @@
     {
       "date": "2026-06-12",
       "pitcher": "Sonny Gray",
+      "team": "BOS",
+      "opp": "",
       "line": 5.5,
       "pick": "under",
       "odds": "-158",
@@ -219,6 +255,8 @@
     {
       "date": "2026-06-12",
       "pitcher": "Nick Lodolo",
+      "team": "CIN",
+      "opp": "",
       "line": 4.5,
       "pick": "under",
       "odds": "-105",
@@ -231,6 +269,8 @@
     {
       "date": "2026-06-12",
       "pitcher": "Joe Ryan",
+      "team": "MIN",
+      "opp": "",
       "line": 6.5,
       "pick": "under",
       "odds": "118",
@@ -243,6 +283,8 @@
     {
       "date": "2026-06-12",
       "pitcher": "Kyle Leahy",
+      "team": "STL",
+      "opp": "",
       "line": 3.5,
       "pick": "over",
       "odds": "133",
@@ -255,6 +297,8 @@
     {
       "date": "2026-06-12",
       "pitcher": "Braxton Ashcraft",
+      "team": "PIT",
+      "opp": "",
       "line": 5.5,
       "pick": "over",
       "odds": "-128",
@@ -267,6 +311,8 @@
     {
       "date": "2026-06-12",
       "pitcher": "Ryan Weathers",
+      "team": "NYM",
+      "opp": "",
       "line": 5.5,
       "pick": "over",
       "odds": "116",
@@ -279,6 +325,8 @@
     {
       "date": "2026-06-12",
       "pitcher": "Jacob Misiorowski",
+      "team": "MIL",
+      "opp": "",
       "line": 8.5,
       "pick": "over",
       "odds": "100",
@@ -291,6 +339,8 @@
     {
       "date": "2026-06-12",
       "pitcher": "Griffin Canning",
+      "team": "SDP",
+      "opp": "",
       "line": 4.5,
       "pick": "over",
       "odds": "-104",
@@ -303,6 +353,8 @@
     {
       "date": "2026-06-12",
       "pitcher": "Roki Sasaki",
+      "team": "LAD",
+      "opp": "",
       "line": 5.5,
       "pick": "over",
       "odds": "106",
@@ -315,6 +367,8 @@
     {
       "date": "2026-06-12",
       "pitcher": "Landen Roupp",
+      "team": "SFG",
+      "opp": "",
       "line": 5.5,
       "pick": "over",
       "odds": "132",
@@ -327,6 +381,8 @@
     {
       "date": "2026-06-12",
       "pitcher": "Jack Leiter",
+      "team": "TEX",
+      "opp": "",
       "line": 5.5,
       "pick": "over",
       "odds": "132",
@@ -339,6 +395,8 @@
     {
       "date": "2026-06-12",
       "pitcher": "Sandy Alcantara",
+      "team": "MIA",
+      "opp": "",
       "line": 4.5,
       "pick": "over",
       "odds": "-103",
@@ -351,6 +409,8 @@
     {
       "date": "2026-06-12",
       "pitcher": "Tanner Bibee",
+      "team": "CLE",
+      "opp": "",
       "line": 5.5,
       "pick": "under",
       "odds": "-157",
@@ -363,6 +423,8 @@
     {
       "date": "2026-06-12",
       "pitcher": "Spencer Strider",
+      "team": "ATL",
+      "opp": "",
       "line": 5.5,
       "pick": "over",
       "odds": "-136",
@@ -375,6 +437,8 @@
     {
       "date": "2026-06-12",
       "pitcher": "Anthony Kay",
+      "team": "CHC",
+      "opp": "",
       "line": 3.5,
       "pick": "over",
       "odds": "-112",
@@ -387,6 +451,8 @@
     {
       "date": "2026-06-12",
       "pitcher": "Andrew Painter",
+      "team": "PHI",
+      "opp": "",
       "line": 3.5,
       "pick": "over",
       "odds": "-133",
@@ -399,6 +465,8 @@
     {
       "date": "2026-06-12",
       "pitcher": "Shane Baz",
+      "team": "BAL",
+      "opp": "",
       "line": 5.5,
       "pick": "over",
       "odds": "126",
@@ -411,6 +479,8 @@
     {
       "date": "2026-06-13",
       "pitcher": "Shane Drohan",
+      "team": "MIL",
+      "opp": "",
       "line": 4.5,
       "pick": "over",
       "odds": "-140",
@@ -423,6 +493,8 @@
     {
       "date": "2026-06-13",
       "pitcher": "Ben Brown",
+      "team": "CHC",
+      "opp": "",
       "line": 4.5,
       "pick": "over",
       "odds": "-130",
@@ -435,6 +507,8 @@
     {
       "date": "2026-06-13",
       "pitcher": "Sean Burke",
+      "team": "CHC",
+      "opp": "",
       "line": 4.5,
       "pick": "over",
       "odds": "-128",
@@ -447,6 +521,8 @@
     {
       "date": "2026-06-13",
       "pitcher": "Luis Castillo",
+      "team": "SEA",
+      "opp": "",
       "line": 4.5,
       "pick": "over",
       "odds": "102",
@@ -459,6 +535,8 @@
     {
       "date": "2026-06-13",
       "pitcher": "Cade Cavalli",
+      "team": "WSN",
+      "opp": "",
       "line": 4.5,
       "pick": "over",
       "odds": "108",
@@ -471,6 +549,8 @@
     {
       "date": "2026-06-13",
       "pitcher": "Trevor McDonald",
+      "team": "SFG",
+      "opp": "",
       "line": 4.5,
       "pick": "over",
       "odds": "100",
@@ -483,6 +563,8 @@
     {
       "date": "2026-06-13",
       "pitcher": "Bubba Chandler",
+      "team": "PIT",
+      "opp": "",
       "line": 4.5,
       "pick": "over",
       "odds": "-104",
@@ -495,6 +577,8 @@
     {
       "date": "2026-06-13",
       "pitcher": "Michael Soroka",
+      "team": "ARI",
+      "opp": "",
       "line": 5.5,
       "pick": "over",
       "odds": "119",
@@ -507,6 +591,8 @@
     {
       "date": "2026-06-13",
       "pitcher": "Noah Cameron",
+      "team": "KCR",
+      "opp": "",
       "line": 4.5,
       "pick": "over",
       "odds": "-115",
@@ -519,6 +605,8 @@
     {
       "date": "2026-06-13",
       "pitcher": "Tarik Skubal",
+      "team": "DET",
+      "opp": "",
       "line": 5.5,
       "pick": "over",
       "odds": "-106",
@@ -531,6 +619,8 @@
     {
       "date": "2026-06-13",
       "pitcher": "Cam Schlittler",
+      "team": "NYM",
+      "opp": "",
       "line": 5.5,
       "pick": "over",
       "odds": "119",
@@ -543,6 +633,8 @@
     {
       "date": "2026-06-13",
       "pitcher": "Yoshinobu Yamamoto",
+      "team": "LAD",
+      "opp": "",
       "line": 6.5,
       "pick": "over",
       "odds": "118",
@@ -555,6 +647,8 @@
     {
       "date": "2026-06-13",
       "pitcher": "Mike Burrows",
+      "team": "HOU",
+      "opp": "",
       "line": 4.5,
       "pick": "over",
       "odds": "128",
@@ -567,6 +661,8 @@
     {
       "date": "2026-06-13",
       "pitcher": "Connor Prielipp",
+      "team": "MIN",
+      "opp": "",
       "line": 4.5,
       "pick": "over",
       "odds": "-130",
@@ -579,6 +675,8 @@
     {
       "date": "2026-06-13",
       "pitcher": "Jacob deGrom",
+      "team": "TEX",
+      "opp": "",
       "line": 6.5,
       "pick": "over",
       "odds": "125",
@@ -591,6 +689,8 @@
     {
       "date": "2026-06-13",
       "pitcher": "Matthew Liberatore",
+      "team": "STL",
+      "opp": "",
       "line": 4.5,
       "pick": "over",
       "odds": "-108",
@@ -603,6 +703,8 @@
     {
       "date": "2026-06-13",
       "pitcher": "Griffin Jax",
+      "team": "TBR",
+      "opp": "",
       "line": 4.5,
       "pick": "over",
       "odds": "-102",
@@ -615,6 +717,8 @@
     {
       "date": "2026-06-13",
       "pitcher": "Rhett Lowder",
+      "team": "CIN",
+      "opp": "",
       "line": 3.5,
       "pick": "under",
       "odds": "-115",
@@ -627,6 +731,8 @@
     {
       "date": "2026-06-13",
       "pitcher": "Joey Cantillo",
+      "team": "CLE",
+      "opp": "",
       "line": 4.5,
       "pick": "under",
       "odds": "126",

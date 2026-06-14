@@ -54,6 +54,8 @@ def log_picks(edges_df: pd.DataFrame, date_str: str) -> int:
             int(row["_raw_odds"]),
             row["Proj K"],
             round(float(row["_edge_val"]), 4),
+            row.get("Team", ""),
+            row.get("Opp", ""),
         ])
 
     PICKS_CSV.parent.mkdir(parents=True, exist_ok=True)
@@ -78,7 +80,7 @@ def log_picks(edges_df: pd.DataFrame, date_str: str) -> int:
                     f.write("\n")
         w = csv.writer(f)
         if not file_exists:
-            w.writerow(["game_date", "pitcher_name", "line", "pick", "odds", "model_projection", "edge"])
+            w.writerow(["game_date", "pitcher_name", "line", "pick", "odds", "model_projection", "edge", "team", "opp"])
         w.writerows(new_rows)
 
     print(f"[picks] Wrote {len(new_rows)} new row(s) to {PICKS_CSV}")
@@ -102,8 +104,55 @@ def run_tracker() -> None:
         print(f"[tracker] stderr: {result.stderr}")
 
 
-def export_site_data(edges_df: pd.DataFrame, date_str: str, n_props: int) -> None:
+BREF_TO_ABBREV = {
+    # Short abbreviations
+    "ARI":"ARI","ATL":"ATL","BAL":"BAL","BOS":"BOS","CHC":"CHC","CHW":"CWS",
+    "CIN":"CIN","CLE":"CLE","COL":"COL","DET":"DET","HOU":"HOU","KCR":"KCR",
+    "KC":"KCR","LAA":"LAA","LAD":"LAD","MIA":"MIA","MIL":"MIL","MIN":"MIN",
+    "NYM":"NYM","NYY":"NYY","OAK":"OAK","PHI":"PHI","PIT":"PIT","SDP":"SDP",
+    "SD":"SDP","SFG":"SFG","SF":"SFG","SEA":"SEA","STL":"STL","TBR":"TBR",
+    "TB":"TBR","TEX":"TEX","TOR":"TOR","WSN":"WSN","WSH":"WSN",
+    # BRef full/city team names (from pitching_stats_bref)
+    "Arizona":"ARI","Atlanta":"ATL","Baltimore":"BAL","Boston":"BOS",
+    "Chi Cubs":"CHC","Chi White Sox":"CWS","Cincinnati":"CIN","Cleveland":"CLE",
+    "Colorado":"COL","Detroit":"DET","Houston":"HOU","Kansas City":"KCR",
+    "LA Angels":"LAA","LA Dodgers":"LAD","Miami":"MIA","Milwaukee":"MIL",
+    "Minnesota":"MIN","NY Mets":"NYM","NY Yankees":"NYY","Oakland":"OAK",
+    "Athletics":"OAK","Philadelphia":"PHI","Pittsburgh":"PIT","San Diego":"SDP",
+    "San Francisco":"SFG","Seattle":"SEA","St. Louis":"STL","Tampa Bay":"TBR",
+    "Texas":"TEX","Toronto":"TOR","Washington":"WSN",
+    # Ambiguous city names — default to NL/more common team
+    "New York":"NYM","Los Angeles":"LAD","Chicago":"CHC",
+}
+
+
+def export_site_data(edges_df: pd.DataFrame, date_str: str, n_props: int, pitching_df: pd.DataFrame | None = None) -> None:
     DOCS_DIR.mkdir(parents=True, exist_ok=True)
+
+    # Build pitcher→team lookup from savant data
+    pitcher_teams: dict[str, str] = {}
+    if pitching_df is not None and not pitching_df.empty:
+        for _, row in pitching_df.iterrows():
+            name = str(row.get("Name", "") or "").strip()
+            team = str(row.get("Team", "") or "").strip()
+            if not name or not team:
+                continue
+            # For traded players BRef uses "Team1,Team2" — take last (most recent)
+            last_team = team.split(",")[-1].strip()
+            abbrev = BREF_TO_ABBREV.get(last_team, BREF_TO_ABBREV.get(team, ""))
+            if abbrev:
+                pitcher_teams[name.lower()] = abbrev
+
+    # Build (date, pitcher) → {team, opp} lookup from picks.csv
+    pick_lookup: dict[tuple, dict] = {}
+    if PICKS_CSV.exists():
+        pdf = pd.read_csv(PICKS_CSV, dtype=str)
+        for _, row in pdf.iterrows():
+            key = ((row.get("game_date") or "").strip(), (row.get("pitcher_name") or "").strip())
+            pick_lookup[key] = {
+                "team": (row.get("team") or "").strip(),
+                "opp": (row.get("opp") or "").strip(),
+            }
 
     picks = []
     if not edges_df.empty:
@@ -139,9 +188,16 @@ def export_site_data(edges_df: pd.DataFrame, date_str: str, n_props: int) -> Non
                 edge = float(edge_raw) if str(edge_raw).strip() not in ("", "nan") else None
             except (ValueError, TypeError):
                 continue
+            date_val = (row.get("game_date") or "").strip()
+            pitcher_val = (row.get("pitcher_name") or "").strip()
+            pl = pick_lookup.get((date_val, pitcher_val), {})
+            team = pl.get("team") or pitcher_teams.get(pitcher_val.lower(), "")
+            opp = pl.get("opp", "")
             results.append({
-                "date": (row.get("game_date") or "").strip(),
-                "pitcher": (row.get("pitcher_name") or "").strip(),
+                "date": date_val,
+                "pitcher": pitcher_val,
+                "team": team,
+                "opp": opp,
                 "line": float(row.get("line") or 0),
                 "pick": (row.get("pick") or "").strip(),
                 "odds": (row.get("odds") or "").strip(),
@@ -249,7 +305,7 @@ def main():
 
     log_picks(edges_df, date_str)
     run_tracker()
-    export_site_data(edges_df, date_str, n_props)
+    export_site_data(edges_df, date_str, n_props, pitching_df)
 
 
 if __name__ == "__main__":
