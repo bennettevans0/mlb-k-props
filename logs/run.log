@@ -1,0 +1,113 @@
+﻿
+=== 2026-06-12 08:00:03 ===
+[odds] Fetching today's MLB games from The Odds API...
+[odds] Found 15 games. Fetching K prop lines...
+[odds] Cached raw odds for 15 events to raw_odds_2026-06-12.json
+[odds] 29 props from FanDuel, DraftKings, MyBookie
+[main] Found 29 pitcher props. Loading stats...
+[savant] Loading pitching stats from cache: pitching_2026.pkl
+[savant] Loading team K rates from cache: team_batting_2026.json
+[edge] Skipping Eduardo Rodriguez: no stats found
+[edge] Skipping Samuel Aldegheri: insufficient IP (12.0)
+[edge] Skipping Gage Jump: insufficient IP (18.1)
+
+[starters] Fetching probable starters from MLB Stats API...
+[starters] Found 28 probable starters.
+    Pitcher            Team    Opp      Proj K    Line  Side    Edge%      Odds  Book
+--  -----------------  ------  -----  --------  ------  ------  -------  ------  ----------
+ 0  Luinder Avila      KCR     HOU         6.3     3.5  Over    +38.9%     +100  FanDuel
+ 1  Bryce Miller       SEA     WSN         7       4.5  Over    +29.8%     -129  DraftKings
+ 2  Zack Littell       WSN     SEA         4.4     3.5  Over    +18.9%     +100  FanDuel
+ 3  Javier Assad       CHC     SFG         3.9     3.5  Over    +18.0%     +135  DraftKings
+ 4  Sonny Gray         BOS     TEX         4.1     5.5  Under   +16.2%     -158  DraftKings
+ 5  Nick Lodolo        CIN     ARI         3.8     4.5  Under   +14.3%     -105  FanDuel
+ 6  Joe Ryan           MIN     STL         5.7     6.5  Under   +13.1%     +118  DraftKings
+ 7  Kyle Leahy         STL     MIN         4.1     3.5  Over    +12.5%     +133  DraftKings
+ 8  Braxton Ashcraft   PIT     MIA         6.6     5.5  Over    +12.1%     -128  FanDuel
+ 9  Ryan Weathers      NYY     TOR         5.8     5.5  Over    +11.6%     +116  DraftKings
+10  Jacob Misiorowski  MIL     PHI         9.2     8.5  Over    +11.4%     +100  FanDuel
+11  Griffin Canning    SDP     BAL         5       4.5  Over    +11.3%     -104  DraftKings
+12  Roki Sasaki        LAD     CHW         5.9     5.5  Over    +11.2%     +106  FanDuel
+13  Landen Roupp       SFG     CHC         5.7     5.5  Over    +10.6%     +132  FanDuel
+14  Jack Leiter        TEX     BOS         5.9     5.5  Over    +9.4%      +132  FanDuel
+15  Sandy Alcantara    MIA     PIT         4.9     4.5  Over    +8.8%      -103  DraftKings
+16  Tanner Bibee       CLE     DET         4.6     5.5  Under   +7.1%      -157  DraftKings
+17  Spencer Strider    ATL     NYM         6.2     5.5  Over    +6.2%      -136  DraftKings
+18  Anthony Kay        CHW     LAD         3.8     3.5  Over    +5.5%      -112  FanDuel
+19  Andrew Painter     PHI     MIL         4       3.5  Over    +5.5%      -133  DraftKings
+20  Shane Baz          BAL     SDP         5.4     5.5  Over    +5.3%      +126  FanDuel
+
+21 verified edge(s). 0 dropped by starter filter.
+[email] Sent to bennettevans0@gmail.com
+[picks] Wrote 21 new row(s) to C:\Users\benne\OneDrive\Documents\KTracker\picks.csv
+[tracker] Running k_tracker_1.py...
+Grading pending picks...
+
+Record: 5-6-0  |  Hit rate: 45.5%
+Profit: +0.41 units  |  ROI: +3.7%
+
+By pick type:
+  over: 3-5 (37.5%)
+  under: 2-1 (66.7%)
+
+Last 7 days: 5-6, +0.41 units
+
+Excel report written to k_tracker_report.xlsx
+
+Exit code: 0
+
+=== 2026-06-13 08:00:04 ===
+[odds] Fetching today's MLB games from The Odds API...
+[odds] Found 15 games. Fetching K prop lines...
+[odds] Cached raw odds for 15 events to raw_odds_2026-06-13.json
+[odds] 28 props from FanDuel, DraftKings, MyBookie
+[main] Found 28 pitcher props. Loading stats...
+[savant] Loading pitching stats from cache: pitching_2026.pkl
+[savant] Loading team K rates from cache: team_batting_2026.json
+[edge] Skipping Trey Gibson: insufficient IP (17.0)
+[edge] Skipping Randy Vasquez: no stats found
+[edge] Skipping Martin Perez: no stats found
+[edge] Skipping Jose Soriano: no stats found
+
+[starters] Fetching probable starters from MLB Stats API...
+[starters] Found 29 probable starters.
+    Pitcher             Team    Opp      Proj K    Line  Side    Edge%      Odds  Book
+--  ------------------  ------  -----  --------  ------  ------  -------  ------  ----------
+ 0  Shane Drohan        MIL     PHI         7.2     4.5  Over    +28.8%     -140  FanDuel
+ 1  Ben Brown           CHC     SFG         6.7     4.5  Over    +27.1%     -130  DraftKings
+ 2  Sean Burke          CHW     LAD         6.1     4.5  Over    +20.7%     -128  FanDuel
+ 3  Luis Castillo       SEA     WSN         5.4     4.5  Over    +17.3%     +102  FanDuel
+ 4  Cade Cavalli        WSN     SEA         5.6     4.5  Over    +14.6%     +108  DraftKings
+ 5  Trevor McDonald     SFG     CHC         5.1     4.5  Over    +12.8%     +100  DraftKings
+ 6  Bubba Chandler      PIT     MIA         5.1     4.5  Over    +12.4%     -104  FanDuel
+ 7  Michael Soroka      ARI     CIN         6.1     5.5  Over    +10.2%     +119  DraftKings
+ 8  Noah Cameron        KCR     HOU         5.2     4.5  Over    +10.1%     -115  FanDuel
+ 9  Tarik Skubal        DET     CLE         6       5.5  Over    +9.1%      -106  FanDuel
+10  Cam Schlittler      NYY     TOR         5.6     5.5  Over    +9.0%      +119  DraftKings
+11  Yoshinobu Yamamoto  LAD     CHW         6.6     6.5  Over    +8.5%      +118  DraftKings
+12  Mike Burrows        HOU     KCR         4.5     4.5  Over    +7.9%      +128  FanDuel
+13  Connor Prielipp     MIN     STL         5.2     4.5  Over    +7.7%      -130  DraftKings
+14  Jacob deGrom        TEX     BOS         6.5     6.5  Over    +7.6%      +125  DraftKings
+15  Matthew Liberatore  STL     MIN         4.9     4.5  Over    +7.4%      -108  FanDuel
+16  Griffin Jax         TBR     LAA         5.1     4.5  Over    +7.1%      -102  DraftKings
+17  Rhett Lowder        CIN     ARI         3.2     3.5  Under   +6.2%      -115  FanDuel
+18  Joey Cantillo       CLE     DET         4.6     4.5  Under   +5.4%      +126  DraftKings
+
+19 verified edge(s). 0 dropped by starter filter.
+[email] Sent to bennettevans0@gmail.com
+[picks] Wrote 19 new row(s) to C:\Users\benne\OneDrive\Documents\KTracker\picks.csv
+[tracker] Running k_tracker_1.py...
+Grading pending picks...
+
+Record: 12-20-0  |  Hit rate: 37.5%
+Profit: -6.31 units  |  ROI: -19.7%
+
+By pick type:
+  over: 10-15 (40.0%)
+  under: 2-5 (28.6%)
+
+Last 7 days: 12-20, -6.31 units
+
+Excel report written to k_tracker_report.xlsx
+
+Exit code: 0
