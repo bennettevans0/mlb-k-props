@@ -475,23 +475,28 @@ let liveKLoading = false;
 async function fetchLiveKs() {
   if (liveKLoading) return;
   liveKLoading = true;
+  const newData = {};
   try {
     const today = new Date().toISOString().slice(0, 10);
+    // Fetch schedule with linescore only first (fast)
     const schedResp = await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${today}&hydrate=linescore`);
+    if (!schedResp.ok) throw new Error('Schedule fetch failed: ' + schedResp.status);
     const schedData = await schedResp.json();
-    const newData = {};
-    const games = (schedData.dates?.[0]?.games) || [];
+    const games = schedData.dates?.[0]?.games || [];
     const activeGames = games.filter(g => {
       const s = g.status?.abstractGameState || '';
       return s === 'Live' || s === 'Final';
     });
-    await Promise.all(activeGames.map(async (game) => {
+    console.log('Active games found:', activeGames.length, 'of', games.length);
+    // Fetch boxscores one at a time (avoids parallel rate limits)
+    for (const game of activeGames) {
       try {
         const gameId = game.gamePk;
         const status = game.status?.abstractGameState || '';
         const inning = game.linescore?.currentInning || null;
         const inningHalf = game.linescore?.inningHalf || '';
         const bsResp = await fetch(`https://statsapi.mlb.com/api/v1/game/${gameId}/boxscore`);
+        if (!bsResp.ok) { console.warn('Boxscore failed for game', gameId, bsResp.status); continue; }
         const bs = await bsResp.json();
         const teams = bs.teams || {};
         for (const side of ['home', 'away']) {
@@ -512,15 +517,18 @@ async function fetchLiveKs() {
             }
           }
         }
-      } catch(e) { /* skip failed game */ }
-    }));
+        console.log('Loaded game', gameId, '- pitchers so far:', Object.keys(newData).length);
+      } catch(e) {
+        console.warn('Error fetching game', game.gamePk, e.message);
+      }
+    }
     liveKData = newData;
     console.log('Live K data loaded:', Object.keys(newData).length, 'pitchers');
     console.log('Names from API:', Object.keys(newData).slice(0, 10));
     document.getElementById('live-refresh-label').textContent = 'Updated ' + new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
   } catch(e) {
-    console.error('Live K fetch failed:', e);
-    document.getElementById('live-refresh-label').textContent = 'Live K error: ' + e.message;
+    console.error('Live K fetch failed:', e.message);
+    document.getElementById('live-refresh-label').textContent = 'Error: ' + e.message;
   }
   liveKLoading = false;
 }
