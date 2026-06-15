@@ -477,7 +477,8 @@ async function fetchLiveKs() {
   liveKLoading = true;
   try {
     const today = new Date().toISOString().slice(0, 10);
-    const url = `https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${today}&hydrate=linescore,boxscore`;
+    const mlbUrl = `https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${today}&hydrate=linescore,boxscore`;
+    const url = `https://corsproxy.io/?url=${encodeURIComponent(mlbUrl)}`;
     const resp = await fetch(url);
     const data = await resp.json();
     const newData = {};
@@ -516,6 +517,9 @@ async function fetchLiveKs() {
       }
     }
     liveKData = newData;
+    console.log('Live K data loaded:', Object.keys(newData).length, 'pitchers');
+    console.log('Pitcher names from API:', Object.keys(newData).slice(0, 10));
+    console.log('Pick names we need:', todayPicks.slice(0, 5).map(p => p.pitcher.toLowerCase()));
     document.getElementById('live-refresh-label').textContent = 'Updated ' + new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
   } catch(e) {
     console.warn('Live K fetch failed:', e);
