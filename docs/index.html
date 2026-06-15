@@ -484,10 +484,10 @@ async function fetchLiveKs(dateStr) {
     if (!schedResp.ok) throw new Error('Schedule fetch failed: ' + schedResp.status);
     const schedData = await schedResp.json();
     const games = schedData.dates?.[0]?.games || [];
+    // Load ALL games - filter nothing, get Final and Live
     const activeGames = games.filter(g => {
       const s = g.status?.abstractGameState || '';
-      const d = g.status?.detailedState || '';
-      return s === 'Live' || s === 'Final' || d === 'In Progress';
+      return s !== 'Preview';
     });
     console.log('Active games found:', activeGames.length, 'of', games.length);
     console.log('Game states:', games.map(g => g.status?.abstractGameState + '/' + g.status?.detailedState).join(', '));
