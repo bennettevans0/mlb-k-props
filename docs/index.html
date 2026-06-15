@@ -64,7 +64,6 @@
 
     .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
 
-    /* Header */
     .header {
       display: flex;
       align-items: center;
@@ -79,7 +78,6 @@
     .live-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green); margin-right: 5px; animation: pulse 2s infinite; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 
-    /* Stat cards */
     .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
     @media (max-width: 600px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
     .stat-card {
@@ -95,7 +93,6 @@
     .pos { color: var(--green); }
     .neg { color: var(--red); }
 
-    /* Streak */
     .streak-row { display: flex; gap: 4px; margin-top: 8px; flex-wrap: wrap; }
     .s-chip {
       width: 22px; height: 22px; border-radius: 50%;
@@ -106,7 +103,6 @@
     .s-l { background: var(--red-light); color: var(--red); }
     .s-v { background: var(--border); color: var(--text-3); }
 
-    /* Cards */
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -131,7 +127,6 @@
     .pill-count { background: var(--green-light); color: var(--green); }
     .pill-none { background: var(--border); color: var(--text-3); }
 
-    /* Chart */
     .chart-section { padding: 20px 20px 16px; }
     .chart-top { margin-bottom: 16px; }
     .chart-big { font-size: 34px; font-weight: 600; letter-spacing: -1.5px; line-height: 1; }
@@ -151,7 +146,6 @@
     .period-btn:hover { background: var(--border); color: var(--text); }
     .period-btn.active { background: var(--border-strong); color: var(--text); }
 
-    /* Table */
     .table-wrap { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     th {
@@ -164,7 +158,6 @@
     tr:last-child td { border-bottom: none; }
     tr.top-pick td { background: rgba(99,153,34,0.04); }
 
-    /* Team badge */
     .pitcher-cell { display: flex; align-items: center; gap: 9px; }
     .team-badge {
       border-radius: 50%; display: flex; align-items: center; justify-content: center;
@@ -172,11 +165,9 @@
     }
     .pitcher-name { font-weight: 500; }
 
-    /* Matchup */
     .matchup { display: flex; align-items: center; gap: 4px; }
     .matchup-vs { font-size: 10px; color: var(--text-3); }
 
-    /* Badges */
     .badge {
       display: inline-flex; align-items: center;
       font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 99px; white-space: nowrap;
@@ -187,28 +178,23 @@
     .b-loss  { background: var(--red-light); color: var(--red); }
     .b-void  { background: var(--border); color: var(--text-3); }
 
-    /* Edge bar */
     .edge-cell { display: flex; align-items: center; gap: 8px; min-width: 90px; }
     .edge-val { font-weight: 600; color: var(--green); font-size: 12px; min-width: 36px; }
     .edge-bar-bg { flex: 1; height: 5px; background: var(--border); border-radius: 99px; overflow: hidden; }
     .edge-bar-fill { height: 100%; border-radius: 99px; background: var(--green-mid); }
 
-    /* Book tag */
     .book-tag {
       font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 5px;
       border: 1px solid var(--border-strong); color: var(--text-2);
       white-space: nowrap;
     }
 
-    /* Units */
     .units-pos { font-weight: 500; color: var(--green); }
     .units-neg { font-weight: 500; color: var(--red); }
     .muted { color: var(--text-2); font-size: 12px; }
 
-    /* Accent bar */
     .accent-left { width: 3px; height: 32px; border-radius: 99px; flex-shrink: 0; }
 
-    /* Filter row */
     .filter-row {
       display: flex; gap: 6px; flex-wrap: wrap;
       padding: 12px 20px; border-bottom: 1px solid var(--border);
@@ -222,14 +208,27 @@
     .filter-btn:hover { border-color: var(--text-3); color: var(--text); }
     .filter-btn.active { background: var(--green); color: #fff; border-color: var(--green); }
 
-    /* Empty state */
     .empty-state { padding: 48px 24px; text-align: center; }
     .empty-icon { font-size: 36px; margin-bottom: 12px; opacity: .4; }
     .empty-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
     .empty-sub { font-size: 13px; color: var(--text-2); }
 
-    /* No data state */
     .no-data { padding: 32px; text-align: center; color: var(--text-3); font-size: 13px; }
+
+    /* Live K cell styles */
+    .live-k-cell { display: flex; align-items: center; gap: 5px; }
+    .live-k-num { font-weight: 600; font-size: 13px; }
+    .live-k-num.on-pace-win { color: var(--green); }
+    .live-k-num.on-pace-loss { color: var(--red); }
+    .live-k-num.final { color: var(--text); }
+    .live-status {
+      font-size: 9px; font-weight: 600; padding: 2px 5px; border-radius: 4px;
+      text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap;
+    }
+    .live-status.in-progress { background: #FFF3CD; color: #856404; }
+    .live-status.final { background: var(--border); color: var(--text-3); }
+    .live-status.scheduled { background: var(--border); color: var(--text-3); }
+    .live-refresh { font-size: 10px; color: var(--text-3); margin-left: 4px; }
   </style>
 </head>
 <body>
@@ -304,6 +303,7 @@
       <div class="card-pills">
         <span class="pill pill-count" id="picks-count"></span>
         <span class="pill pill-date" id="picks-date"></span>
+        <span class="live-refresh" id="live-refresh-label"></span>
       </div>
     </div>
     <div class="table-wrap">
@@ -317,6 +317,7 @@
             <th>Pick</th>
             <th>Odds</th>
             <th>Proj K</th>
+            <th>Live K</th>
             <th>Edge</th>
             <th>Book</th>
           </tr>
@@ -326,7 +327,7 @@
     </div>
   </div>
 
-  <!-- Empty state (shown when no picks) -->
+  <!-- Empty state -->
   <div class="card" id="empty-card" style="display:none;">
     <div class="card-header">
       <span class="card-title">Today's picks</span>
@@ -466,6 +467,91 @@ function fmtDate(d) {
   return `${months[parseInt(m,10)-1]} ${parseInt(day,10)}`;
 }
 
+// ── Live K data ────────────────────────────────────────────────────────────────
+// Maps pitcher name (lowercase) -> { k, status, inning }
+let liveKData = {};
+let liveKLoading = false;
+
+async function fetchLiveKs() {
+  if (liveKLoading) return;
+  liveKLoading = true;
+  try {
+    const today = new Date().toISOString().slice(0, 10);
+    const url = `https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${today}&hydrate=linescore,boxscore`;
+    const resp = await fetch(url);
+    const data = await resp.json();
+    const newData = {};
+
+    for (const date of (data.dates || [])) {
+      for (const game of (date.games || [])) {
+        const status = game.status?.abstractGameState || '';
+        const detailedState = game.status?.detailedState || '';
+        const inning = game.linescore?.currentInning || null;
+        const inningHalf = game.linescore?.inningHalf || '';
+
+        // Pull pitcher K totals from boxscore
+        const teams = game.boxscore?.teams || {};
+        for (const side of ['home', 'away']) {
+          const pitchers = teams[side]?.pitchers || [];
+          const playerInfo = teams[side]?.players || {};
+          for (const pid of pitchers) {
+            const p = playerInfo['ID' + pid];
+            if (!p) continue;
+            const name = p.person?.fullName || '';
+            const ks = p.stats?.pitching?.strikeOuts;
+            if (name && ks !== undefined) {
+              const gameStatus = status === 'Final' ? 'final'
+                : status === 'Live' ? 'live'
+                : 'scheduled';
+              newData[name.toLowerCase()] = {
+                k: ks,
+                status: gameStatus,
+                detailedState,
+                inning,
+                inningHalf,
+              };
+            }
+          }
+        }
+      }
+    }
+    liveKData = newData;
+    document.getElementById('live-refresh-label').textContent = 'Updated ' + new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
+  } catch(e) {
+    console.warn('Live K fetch failed:', e);
+  }
+  liveKLoading = false;
+}
+
+function liveKHtml(pitcher, line, pick) {
+  const info = liveKData[pitcher.toLowerCase()];
+  if (!info) {
+    return '<span class="muted">—</span>';
+  }
+
+  const k = info.k;
+  let paceClass = '';
+  let statusHtml = '';
+
+  if (info.status === 'live') {
+    // Simple on-pace check: over pick wants k > line, under wants k < line
+    if (pick === 'over') {
+      paceClass = k >= line ? 'on-pace-win' : 'on-pace-loss';
+    } else {
+      paceClass = k <= line ? 'on-pace-win' : 'on-pace-loss';
+    }
+    const inningStr = info.inning ? `${info.inningHalf === 'Bottom' ? 'Bot' : 'Top'} ${info.inning}` : 'Live';
+    statusHtml = `<span class="live-status in-progress">${inningStr}</span>`;
+  } else if (info.status === 'final') {
+    paceClass = 'final';
+    statusHtml = `<span class="live-status final">Final</span>`;
+  } else {
+    return '<span class="muted">—</span>';
+  }
+
+  return `<div class="live-k-cell"><span class="live-k-num ${paceClass}">${k}</span>${statusHtml}</div>`;
+}
+
 // ── Data ──────────────────────────────────────────────────────────────────────
 let allResults = [];
 let todayPicks = [];
@@ -486,13 +572,20 @@ async function load() {
     todayPicks = t.picks || [];
     allResults = (r.results || []).filter(r => r.result);
     metaInfo = m;
+    // Fetch live Ks then render
+    await fetchLiveKs();
     render(t.date);
+    // Refresh live Ks every 2 minutes and re-render picks table only
+    setInterval(async () => {
+      await fetchLiveKs();
+      renderPicksTable();
+    }, 120000);
   } catch(e) {
     document.body.innerHTML += `<p style="text-align:center;padding:40px;color:#999;">Could not load data — run the script first.</p>`;
   }
 }
 
-// ── Stats ────────────────────────────────────────────────────────────────────
+// ── Stats ─────────────────────────────────────────────────────────────────────
 function renderStats() {
   const settled = allResults.filter(r => r.result !== 'void');
   const wins = settled.filter(r => r.result === 'win').length;
@@ -519,7 +612,7 @@ function renderStreak() {
   ).join('');
 }
 
-// ── Chart ────────────────────────────────────────────────────────────────────
+// ── Chart ─────────────────────────────────────────────────────────────────────
 function buildCumulative(results) {
   const byDate = {};
   for (const r of results) {
@@ -661,6 +754,26 @@ function setPeriod(p, btn) {
 }
 
 // ── Today's picks ─────────────────────────────────────────────────────────────
+function renderPicksTable() {
+  document.getElementById('picks-tbody').innerHTML = todayPicks.map((p, i) => {
+    const accentColor = i === 0 ? '#97C459' : 'var(--border)';
+    const awayAbbr = p.opp || '?';
+    const homeAbbr = p.team || '?';
+    return `<tr class="${i === 0 ? 'top-pick' : ''}">
+      <td style="padding:0 0 0 8px;"><div class="accent-left" style="background:${accentColor};"></div></td>
+      <td><div class="pitcher-cell">${teamBadge(p.team)}<span class="pitcher-name">${p.pitcher}</span></div></td>
+      <td>${matchupHtml(awayAbbr, homeAbbr)}</td>
+      <td>${p.line}</td>
+      <td><span class="badge b-${p.pick}">${p.pick}</span></td>
+      <td class="muted">${p.odds}</td>
+      <td>${p.proj_k}</td>
+      <td>${liveKHtml(p.pitcher, p.line, p.pick)}</td>
+      <td>${edgeHtml(p.edge, p.edge_val)}</td>
+      <td><span class="book-tag">${p.book || '—'}</span></td>
+    </tr>`;
+  }).join('');
+}
+
 function renderPicks(dateStr) {
   const picksCard = document.getElementById('picks-card');
   const emptyCard = document.getElementById('empty-card');
@@ -679,23 +792,7 @@ function renderPicks(dateStr) {
   picksCard.style.display = '';
   emptyCard.style.display = 'none';
   document.getElementById('picks-count').textContent = `${todayPicks.length} play${todayPicks.length !== 1 ? 's' : ''}`;
-
-  document.getElementById('picks-tbody').innerHTML = todayPicks.map((p, i) => {
-    const accentColor = i === 0 ? '#97C459' : 'var(--border)';
-    const awayAbbr = p.opp || '?';
-    const homeAbbr = p.team || '?';
-    return `<tr class="${i === 0 ? 'top-pick' : ''}">
-      <td style="padding:0 0 0 8px;"><div class="accent-left" style="background:${accentColor};"></div></td>
-      <td><div class="pitcher-cell">${teamBadge(p.team)}<span class="pitcher-name">${p.pitcher}</span></div></td>
-      <td>${matchupHtml(awayAbbr, homeAbbr)}</td>
-      <td>${p.line}</td>
-      <td><span class="badge b-${p.pick}">${p.pick}</span></td>
-      <td class="muted">${p.odds}</td>
-      <td>${p.proj_k}</td>
-      <td>${edgeHtml(p.edge, p.edge_val)}</td>
-      <td><span class="book-tag">${p.book || '—'}</span></td>
-    </tr>`;
-  }).join('');
+  renderPicksTable();
 }
 
 // ── Recent results ────────────────────────────────────────────────────────────
