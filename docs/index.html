@@ -479,6 +479,8 @@ async function fetchLiveKs(dateStr) {
   try {
     // Use the date from today.json picks data (avoids UTC midnight rollover issues)
     const today = dateStr || new Date().toISOString().slice(0, 10);
+    console.log('fetchLiveKs called with dateStr:', dateStr, '=> using date:', today);
+    console.log('fetchLiveKs called with dateStr:', dateStr, '=> using date:', today);
     console.log('Fetching live Ks for date:', today);
     const schedResp = await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${today}&hydrate=linescore`);
     if (!schedResp.ok) throw new Error('Schedule fetch failed: ' + schedResp.status);
