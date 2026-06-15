@@ -472,30 +472,25 @@ function fmtDate(d) {
 let liveKData = {};
 let liveKLoading = false;
 
-async function fetchLiveKs() {
+async function fetchLiveKs(dateStr) {
   if (liveKLoading) return;
   liveKLoading = true;
   const newData = {};
   try {
-    // Use Eastern time for MLB schedule date (avoids UTC rollover after ~8PM ET)
-    const etNow = new Date(new Date().toLocaleString('en-US', {timeZone: 'America/New_York'}));
-    const today = etNow.getFullYear() + '-' + String(etNow.getMonth()+1).padStart(2,'0') + '-' + String(etNow.getDate()).padStart(2,'0');
-    // Fetch schedule with linescore only first (fast)
+    // Use the date from today.json picks data (avoids UTC midnight rollover issues)
+    const today = dateStr || new Date().toISOString().slice(0, 10);
+    console.log('Fetching live Ks for date:', today);
     const schedResp = await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${today}&hydrate=linescore`);
     if (!schedResp.ok) throw new Error('Schedule fetch failed: ' + schedResp.status);
     const schedData = await schedResp.json();
     const games = schedData.dates?.[0]?.games || [];
-    // Include all games - filter out only Preview/Scheduled that haven't started
     const activeGames = games.filter(g => {
       const s = g.status?.abstractGameState || '';
       const d = g.status?.detailedState || '';
-      return s !== 'Preview' || d === 'In Progress';
+      return s === 'Live' || s === 'Final' || d === 'In Progress';
     });
     console.log('Active games found:', activeGames.length, 'of', games.length);
     console.log('Game states:', games.map(g => g.status?.abstractGameState + '/' + g.status?.detailedState).join(', '));
-    console.log('Game states:', games.map(g => g.status?.abstractGameState + '/' + g.status?.detailedState).join(', '));
-    console.log('Game states:', games.map(g => g.status?.abstractGameState + '/' + g.status?.detailedState).join(', '));
-    // Fetch boxscores one at a time (avoids parallel rate limits)
     for (const game of activeGames) {
       try {
         const gameId = game.gamePk;
@@ -524,7 +519,6 @@ async function fetchLiveKs() {
             }
           }
         }
-        console.log('Loaded game', gameId, '- pitchers so far:', Object.keys(newData).length);
       } catch(e) {
         console.warn('Error fetching game', game.gamePk, e.message);
       }
@@ -570,6 +564,8 @@ function liveKHtml(pitcher, line, pick) {
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 let allResults = [];
+let picksDate = null;
+let picksDate = null;
 let todayPicks = [];
 let metaInfo = {};
 let currentFilter = 'all';
@@ -586,14 +582,16 @@ async function load() {
       fetch('data/meta.json?v=' + Date.now()).then(x => x.json()).catch(() => ({})),
     ]);
     todayPicks = t.picks || [];
+    picksDate = t.date || null;
+    picksDate = t.date || null;
     allResults = (r.results || []).filter(r => r.result);
     metaInfo = m;
     // Fetch live Ks then render
-    await fetchLiveKs();
+    await fetchLiveKs(t.date);
     render(t.date);
     // Refresh live Ks every 2 minutes and re-render picks table only
     setInterval(async () => {
-      await fetchLiveKs();
+      await fetchLiveKs(picksDate);
       renderPicksTable();
     }, 120000);
   } catch(e) {
