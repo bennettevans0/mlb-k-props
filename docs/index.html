@@ -264,6 +264,56 @@
     </div>
   </div>
 
+  <!-- Today live stats banner -->
+  <div id="today-live-banner" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 18px;margin-bottom:16px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="live-dot"></span>
+        <span style="font-weight:600;font-size:13px;">Today (live)</span>
+        <span style="font-size:11px;color:var(--text-3);">finals only · updates as games end</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:24px;">
+        <div style="text-align:center;">
+          <div style="font-size:10px;color:var(--text-2);text-transform:uppercase;letter-spacing:.05em;">Record</div>
+          <div id="today-record" style="font-size:18px;font-weight:600;">—</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:10px;color:var(--text-2);text-transform:uppercase;letter-spacing:.05em;">Win rate</div>
+          <div id="today-winrate" style="font-size:18px;font-weight:600;">—</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:10px;color:var(--text-2);text-transform:uppercase;letter-spacing:.05em;">Units</div>
+          <div id="today-units" style="font-size:18px;font-weight:600;">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Today live stats banner -->
+  <div id="today-live-banner" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 18px;margin-bottom:16px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="live-dot"></span>
+        <span style="font-weight:600;font-size:13px;">Today (live)</span>
+        <span style="font-size:11px;color:var(--text-3);">finals only · updates as games end</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:24px;">
+        <div style="text-align:center;">
+          <div style="font-size:10px;color:var(--text-2);text-transform:uppercase;letter-spacing:.05em;">Record</div>
+          <div id="today-record" style="font-size:18px;font-weight:600;">—</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:10px;color:var(--text-2);text-transform:uppercase;letter-spacing:.05em;">Win rate</div>
+          <div id="today-winrate" style="font-size:18px;font-weight:600;">—</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:10px;color:var(--text-2);text-transform:uppercase;letter-spacing:.05em;">Units</div>
+          <div id="today-units" style="font-size:18px;font-weight:600;">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Chart -->
   <div class="card">
     <div class="card-header">
@@ -589,10 +639,14 @@ async function load() {
     // Fetch live Ks then render
     await fetchLiveKs(t.date);
     render(t.date);
+    renderTodayLive();
+    renderTodayLive();
     // Refresh live Ks every 2 minutes and re-render picks table only
     setInterval(async () => {
       await fetchLiveKs(picksDate);
       renderPicksTable();
+      renderTodayLive();
+      renderTodayLive();
     }, 120000);
   } catch(e) {
     document.body.innerHTML += `<p style="text-align:center;padding:40px;color:#999;">Could not load data — run the script first.</p>`;
@@ -768,6 +822,108 @@ function setPeriod(p, btn) {
 }
 
 // ── Today's picks ─────────────────────────────────────────────────────────────
+// ── Today live stats (grades today's finals from live K data) ──────────────────
+function americanToProfit(oddsStr) {
+  // Returns profit per 1 unit staked for a winning bet
+  const o = parseInt(String(oddsStr).replace('+',''), 10);
+  if (isNaN(o)) return 0;
+  return o > 0 ? o / 100 : 100 / Math.abs(o);
+}
+
+function renderTodayLive() {
+  const banner = document.getElementById('today-live-banner');
+  let wins = 0, losses = 0, pushes = 0, units = 0, graded = 0;
+
+  for (const p of todayPicks) {
+    const info = liveKData[p.pitcher.toLowerCase()];
+    if (!info || info.status !== 'final') continue;
+    const k = info.k;
+    const line = parseFloat(p.line);
+    if (isNaN(line)) continue;
+
+    let result;
+    if (k === line) {
+      result = 'push';
+    } else if (p.pick === 'over') {
+      result = k > line ? 'win' : 'loss';
+    } else {
+      result = k < line ? 'win' : 'loss';
+    }
+
+    graded++;
+    if (result === 'win') { wins++; units += americanToProfit(p.odds); }
+    else if (result === 'loss') { losses++; units -= 1; }
+    else { pushes++; }
+  }
+
+  if (graded === 0) {
+    banner.style.display = 'none';
+    return;
+  }
+
+  banner.style.display = '';
+  document.getElementById('today-record').textContent =
+    `${wins}\u2013${losses}` + (pushes > 0 ? ` (${pushes}P)` : '');
+  const wr = (wins + losses) > 0 ? Math.round(wins / (wins + losses) * 100) : 0;
+  const wrEl = document.getElementById('today-winrate');
+  wrEl.textContent = `${wr}%`;
+  wrEl.style.color = wr >= 52 ? 'var(--green)' : 'var(--red)';
+  const uEl = document.getElementById('today-units');
+  uEl.textContent = (units >= 0 ? '+' : '') + units.toFixed(2) + 'u';
+  uEl.style.color = units >= 0 ? 'var(--green)' : 'var(--red)';
+}
+
+// ── Today live stats (grades today's finals from live K data) ──────────────────
+function americanToProfit(oddsStr) {
+  // Returns profit per 1 unit staked for a winning bet
+  const o = parseInt(String(oddsStr).replace('+',''), 10);
+  if (isNaN(o)) return 0;
+  return o > 0 ? o / 100 : 100 / Math.abs(o);
+}
+
+function renderTodayLive() {
+  const banner = document.getElementById('today-live-banner');
+  let wins = 0, losses = 0, pushes = 0, units = 0, graded = 0;
+
+  for (const p of todayPicks) {
+    const info = liveKData[p.pitcher.toLowerCase()];
+    if (!info || info.status !== 'final') continue;
+    const k = info.k;
+    const line = parseFloat(p.line);
+    if (isNaN(line)) continue;
+
+    let result;
+    if (k === line) {
+      result = 'push';
+    } else if (p.pick === 'over') {
+      result = k > line ? 'win' : 'loss';
+    } else {
+      result = k < line ? 'win' : 'loss';
+    }
+
+    graded++;
+    if (result === 'win') { wins++; units += americanToProfit(p.odds); }
+    else if (result === 'loss') { losses++; units -= 1; }
+    else { pushes++; }
+  }
+
+  if (graded === 0) {
+    banner.style.display = 'none';
+    return;
+  }
+
+  banner.style.display = '';
+  document.getElementById('today-record').textContent =
+    `${wins}\u2013${losses}` + (pushes > 0 ? ` (${pushes}P)` : '');
+  const wr = (wins + losses) > 0 ? Math.round(wins / (wins + losses) * 100) : 0;
+  const wrEl = document.getElementById('today-winrate');
+  wrEl.textContent = `${wr}%`;
+  wrEl.style.color = wr >= 52 ? 'var(--green)' : 'var(--red)';
+  const uEl = document.getElementById('today-units');
+  uEl.textContent = (units >= 0 ? '+' : '') + units.toFixed(2) + 'u';
+  uEl.style.color = units >= 0 ? 'var(--green)' : 'var(--red)';
+}
+
 function renderPicksTable() {
   document.getElementById('picks-tbody').innerHTML = todayPicks.map((p, i) => {
     const accentColor = i === 0 ? '#97C459' : 'var(--border)';
