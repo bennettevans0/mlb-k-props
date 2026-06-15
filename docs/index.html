@@ -475,7 +475,7 @@ let liveKLoading = false;
 async function fetchLiveKs(dateStr) {
   if (liveKLoading) return;
   liveKLoading = true;
-  const newData = {};
+  const newData = Object.assign({}, liveKData); // start from last known data
   try {
     // Use the date from today.json picks data (avoids UTC midnight rollover issues)
     const today = dateStr || new Date().toISOString().slice(0, 10);
