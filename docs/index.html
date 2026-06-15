@@ -477,15 +477,19 @@ async function fetchLiveKs() {
   liveKLoading = true;
   const newData = {};
   try {
-    const today = new Date().toISOString().slice(0, 10);
+    // Use Eastern time for MLB schedule date (avoids UTC rollover after ~8PM ET)
+    const etNow = new Date(new Date().toLocaleString('en-US', {timeZone: 'America/New_York'}));
+    const today = etNow.getFullYear() + '-' + String(etNow.getMonth()+1).padStart(2,'0') + '-' + String(etNow.getDate()).padStart(2,'0');
     // Fetch schedule with linescore only first (fast)
     const schedResp = await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${today}&hydrate=linescore`);
     if (!schedResp.ok) throw new Error('Schedule fetch failed: ' + schedResp.status);
     const schedData = await schedResp.json();
     const games = schedData.dates?.[0]?.games || [];
+    // Include all games - filter out only Preview/Scheduled that haven't started
     const activeGames = games.filter(g => {
       const s = g.status?.abstractGameState || '';
-      return s === 'Live' || s === 'Final';
+      const d = g.status?.detailedState || '';
+      return s !== 'Preview' || d === 'In Progress';
     });
     console.log('Active games found:', activeGames.length, 'of', games.length);
     console.log('Game states:', games.map(g => g.status?.abstractGameState + '/' + g.status?.detailedState).join(', '));
