@@ -567,7 +567,6 @@ function liveKHtml(pitcher, line, pick) {
 // ── Data ──────────────────────────────────────────────────────────────────────
 let allResults = [];
 let picksDate = null;
-picksDate = null;
 let todayPicks = [];
 let metaInfo = {};
 let currentFilter = 'all';
@@ -584,7 +583,6 @@ async function load() {
       fetch('data/meta.json?v=' + Date.now()).then(x => x.json()).catch(() => ({})),
     ]);
     todayPicks = t.picks || [];
-    picksDate = t.date || null;
     picksDate = t.date || null;
     allResults = (r.results || []).filter(r => r.result);
     metaInfo = m;
