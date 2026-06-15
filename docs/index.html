@@ -488,6 +488,9 @@ async function fetchLiveKs() {
       return s === 'Live' || s === 'Final';
     });
     console.log('Active games found:', activeGames.length, 'of', games.length);
+    console.log('Game states:', games.map(g => g.status?.abstractGameState + '/' + g.status?.detailedState).join(', '));
+    console.log('Game states:', games.map(g => g.status?.abstractGameState + '/' + g.status?.detailedState).join(', '));
+    console.log('Game states:', games.map(g => g.status?.abstractGameState + '/' + g.status?.detailedState).join(', '));
     // Fetch boxscores one at a time (avoids parallel rate limits)
     for (const game of activeGames) {
       try {
