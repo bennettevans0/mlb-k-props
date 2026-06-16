@@ -39,9 +39,9 @@ TEAM_NAME_TO_ABBREV = {
 }
 
 
-ODDS_API_KEY    = os.environ.get("ODDS_API_KEY",       "c87cc0c5b57c258cb6b099a85bb70372")
+ODDS_API_KEY    = os.environ.get("ODDS_API_KEY",       "")
 GMAIL_USER      = os.environ.get("GMAIL_USER",         "bennettevans0@gmail.com")
-GMAIL_PASSWORD  = os.environ.get("GMAIL_APP_PASSWORD", "ptno rwle tdyb dtnx")
+GMAIL_PASSWORD  = os.environ.get("GMAIL_APP_PASSWORD", "")
 GMAIL_TO        = os.environ.get("GMAIL_TO",           "bennettevans0@gmail.com")
 
 
