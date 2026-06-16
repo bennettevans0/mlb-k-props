@@ -167,6 +167,7 @@
 
     .matchup { display: flex; align-items: center; gap: 4px; }
     .matchup-vs { font-size: 10px; color: var(--text-3); }
+    .matchup-time { font-size: 10px; color: var(--text-3); margin-top: 2px; }
 
     .badge {
       display: inline-flex; align-items: center;
@@ -497,6 +498,17 @@ function teamBadge(abbr, size = 26) {
 
 function matchupHtml(away, home) {
   return `<div class="matchup">${teamBadge(away,22)}<span class="matchup-vs">@</span>${teamBadge(home,22)}</div>`;
+}
+
+function fmtGameTime(iso) {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return "";
+  return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York' }) + ' ET';
+}
+function gameTimeHtml(iso) {
+  const t = fmtGameTime(iso);
+  return t ? `<div class="matchup-time">${t}</div>` : "";
 }
 
 function edgeHtml(edgeStr, edgeVal) {
@@ -932,7 +944,7 @@ function renderPicksTable() {
     return `<tr class="${i === 0 ? 'top-pick' : ''}">
       <td style="padding:0 0 0 8px;"><div class="accent-left" style="background:${accentColor};"></div></td>
       <td><div class="pitcher-cell">${teamBadge(p.team)}<span class="pitcher-name">${p.pitcher}</span></div></td>
-      <td>${matchupHtml(awayAbbr, homeAbbr)}</td>
+      <td>${matchupHtml(awayAbbr, homeAbbr)}${gameTimeHtml(p.time)}</td>
       <td>${p.line}</td>
       <td><span class="badge b-${p.pick}">${p.pick}</span></td>
       <td class="muted">${p.odds}</td>

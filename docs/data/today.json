@@ -11,7 +11,8 @@
       "proj_k": 5.8,
       "edge": "+20.5%",
       "edge_val": 0.2053,
-      "book": "DraftKings"
+      "book": "DraftKings",
+      "time": "2026-06-16T01:40:00Z"
     },
     {
       "pitcher": "Eric Lauer",
@@ -23,7 +24,8 @@
       "proj_k": 3.6,
       "edge": "+8.2%",
       "edge_val": 0.0817,
-      "book": "DraftKings"
+      "book": "DraftKings",
+      "time": "2026-06-16T02:10:00Z"
     },
     {
       "pitcher": "Nick Martinez",
@@ -35,7 +37,8 @@
       "proj_k": 3.1,
       "edge": "+5.4%",
       "edge_val": 0.0541,
-      "book": "FanDuel"
+      "book": "FanDuel",
+      "time": "2026-06-16T02:10:00Z"
     }
   ]
 }
