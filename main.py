@@ -227,6 +227,18 @@ def display_df(edges_df: pd.DataFrame) -> pd.DataFrame:
     return edges_df.drop(columns=HIDDEN_COLS, errors="ignore")
 
 
+def publish_site(date_str):
+    repo = r"C:\Users\benne\mlb-k-props"
+    try:
+        subprocess.run(["git", "add", "docs"], cwd=repo, check=True)
+        # commit returns nonzero when nothing changed - that's fine
+        subprocess.run(["git", "commit", "-m", f"Auto-publish {date_str}"], cwd=repo, check=False)
+        subprocess.run(["git", "push"], cwd=repo, check=True)
+        print("[publish] Pushed docs to GitHub Pages.")
+    except Exception as e:
+        print(f"[publish] Skipped: {e}")
+
+
 def main():
     parser = argparse.ArgumentParser(description="MLB pitcher K prop edge finder")
     parser.add_argument("--min-edge", type=float, default=config.EDGE_THRESHOLD,
@@ -310,6 +322,7 @@ def main():
     log_picks(edges_df, date_str)
     run_tracker()
     export_site_data(edges_df, date_str, n_props, pitching_df)
+    publish_site(date_str)
 
 
 if __name__ == "__main__":
