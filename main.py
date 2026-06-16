@@ -127,7 +127,7 @@ BREF_TO_ABBREV = {
 }
 
 
-def export_site_data(edges_df: pd.DataFrame, date_str: str, n_props: int, pitching_df: pd.DataFrame | None = None) -> None:
+def export_site_data(edges_df: pd.DataFrame, date_str: str, n_props: int, pitching_df: pd.DataFrame | None = None, starter_times: dict | None = None) -> None:
     DOCS_DIR.mkdir(parents=True, exist_ok=True)
 
     # Build pitcherâ†’team lookup from savant data
@@ -156,6 +156,7 @@ def export_site_data(edges_df: pd.DataFrame, date_str: str, n_props: int, pitchi
                 "book": (row.get("book") or "").strip(),
             }
 
+    from data.starters import _normalize
     picks = []
     if not edges_df.empty:
         for _, row in edges_df[edges_df["_edge_val"] > 0].iterrows():
@@ -170,6 +171,7 @@ def export_site_data(edges_df: pd.DataFrame, date_str: str, n_props: int, pitchi
                 "edge": row["Edge%"],
                 "edge_val": round(float(row["_edge_val"]), 4),
                 "book": row.get("Book", ""),
+                "time": (starter_times or {}).get(_normalize(row["Pitcher"]), ""),
             })
     with open(DOCS_DIR / "today.json", "w") as f:
         json.dump({"date": date_str, "picks": picks}, f, indent=2)
@@ -285,10 +287,11 @@ def main():
 
     dropped = []
     starter_error = None
+    starter_times = {}
     # Verify probable starters (skip if nothing to filter)
     if not edges_df.empty:
         print("[starters] Fetching probable starters from MLB Stats API...")
-        starters, starter_error = get_probable_starters(date_str)
+        starters, starter_times, starter_error = get_probable_starters(date_str)
         if starter_error:
             print(f"[starters] WARNING: {starter_error} â€” skipping verification.")
         else:
@@ -321,7 +324,7 @@ def main():
 
     log_picks(edges_df, date_str)
     run_tracker()
-    export_site_data(edges_df, date_str, n_props, pitching_df)
+    export_site_data(edges_df, date_str, n_props, pitching_df, starter_times)
     publish_site(date_str)
 
 

@@ -19,7 +19,7 @@ def _normalize(name: str) -> str:
     return re.sub(r"\s+", " ", name).strip()
 
 
-def get_probable_starters(date_str: str) -> tuple[dict[str, str], str | None]:
+def get_probable_starters(date_str: str) -> tuple[dict[str, str], dict[str, str], str | None]:
     """
     Returns ({normalized_name: display_name}, error_message_or_None).
     Fetches probable pitchers from the MLB Stats API schedule endpoint.
@@ -33,9 +33,10 @@ def get_probable_starters(date_str: str) -> tuple[dict[str, str], str | None]:
         resp.raise_for_status()
         data = resp.json()
     except Exception as exc:
-        return {}, f"MLB API error: {exc}"
+        return {}, {}, f"MLB API error: {exc}"
 
     starters: dict[str, str] = {}
+    times: dict[str, str] = {}
     for date_entry in data.get("dates", []):
         for game in date_entry.get("games", []):
             for side in ("home", "away"):
@@ -43,11 +44,12 @@ def get_probable_starters(date_str: str) -> tuple[dict[str, str], str | None]:
                 if pitcher:
                     full_name = pitcher["fullName"]
                     starters[_normalize(full_name)] = full_name
+                    times[_normalize(full_name)] = game.get("gameDate", "")
 
     if not starters:
-        return {}, "MLB API returned no probable starters (too early or off-day?)"
+        return {}, {}, "MLB API returned no probable starters (too early or off-day?)"
 
-    return starters, None
+    return starters, times, None
 
 
 def filter_to_starters(
