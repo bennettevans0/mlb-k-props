@@ -122,7 +122,7 @@ BREF_TO_ABBREV = {
     "Athletics":"OAK","Philadelphia":"PHI","Pittsburgh":"PIT","San Diego":"SDP",
     "San Francisco":"SFG","Seattle":"SEA","St. Louis":"STL","Tampa Bay":"TBR",
     "Texas":"TEX","Toronto":"TOR","Washington":"WSN",
-    # Ambiguous city names — default to NL/more common team
+    # Ambiguous city names â€” default to NL/more common team
     "New York":"NYM","Los Angeles":"LAD","Chicago":"CHC",
 }
 
@@ -130,7 +130,7 @@ BREF_TO_ABBREV = {
 def export_site_data(edges_df: pd.DataFrame, date_str: str, n_props: int, pitching_df: pd.DataFrame | None = None) -> None:
     DOCS_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Build pitcher→team lookup from savant data
+    # Build pitcherâ†’team lookup from savant data
     pitcher_teams: dict[str, str] = {}
     if pitching_df is not None and not pitching_df.empty:
         for _, row in pitching_df.iterrows():
@@ -138,16 +138,16 @@ def export_site_data(edges_df: pd.DataFrame, date_str: str, n_props: int, pitchi
             team = str(row.get("Team", "") or "").strip()
             if not name or not team:
                 continue
-            # For traded players BRef uses "Team1,Team2" — take last (most recent)
+            # For traded players BRef uses "Team1,Team2" â€” take last (most recent)
             last_team = team.split(",")[-1].strip()
             abbrev = BREF_TO_ABBREV.get(last_team, BREF_TO_ABBREV.get(team, ""))
             if abbrev:
                 pitcher_teams[name.lower()] = abbrev
 
-    # Build (date, pitcher) → {team, opp} lookup from picks.csv
+    # Build (date, pitcher) â†’ {team, opp} lookup from picks.csv
     pick_lookup: dict[tuple, dict] = {}
     if PICKS_CSV.exists():
-        pdf = pd.read_csv(PICKS_CSV, dtype=str)
+        pdf = pd.read_csv(PICKS_CSV, dtype=str).fillna("")
         for _, row in pdf.iterrows():
             key = ((row.get("game_date") or "").strip(), (row.get("pitcher_name") or "").strip())
             pick_lookup[key] = {
@@ -278,7 +278,7 @@ def main():
         print("[starters] Fetching probable starters from MLB Stats API...")
         starters, starter_error = get_probable_starters(date_str)
         if starter_error:
-            print(f"[starters] WARNING: {starter_error} — skipping verification.")
+            print(f"[starters] WARNING: {starter_error} â€” skipping verification.")
         else:
             print(f"[starters] Found {len(starters)} probable starters.")
             edges_df, dropped = filter_to_starters(edges_df, starters)
@@ -305,7 +305,7 @@ def main():
             n_props=n_props,
         )
     else:
-        print("[email] Skipping — GMAIL_USER / GMAIL_APP_PASSWORD not configured.")
+        print("[email] Skipping â€” GMAIL_USER / GMAIL_APP_PASSWORD not configured.")
 
     log_picks(edges_df, date_str)
     run_tracker()
