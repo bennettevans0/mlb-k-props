@@ -236,7 +236,7 @@
       <div class="card">
         <div class="card-header"><span class="card-title">Today's K picks</span><div class="card-pills"><span class="pill pill-date" id="k-picks-count"></span></div></div>
         <div class="table-wrap"><table>
-          <thead><tr><th></th><th>Pitcher</th><th>Matchup</th><th>Line</th><th>Pick</th><th>Odds</th><th>Proj K</th><th>Live K</th><th>Edge</th><th>Book</th></tr></thead>
+          <thead><tr><th></th><th>Pitcher</th><th>Line</th><th>Pick</th><th>Live K</th><th>Matchup</th><th>Proj K</th><th>Odds</th><th>Edge</th><th>Book</th></tr></thead>
           <tbody id="k-picks-body"></tbody>
         </table></div>
         <div id="k-picks-empty"></div>
@@ -269,7 +269,7 @@
       <div class="card">
         <div class="card-header"><span class="card-title">Today's HR picks</span><div class="card-pills"><span class="pill pill-date" id="hr-picks-count"></span></div></div>
         <div class="table-wrap"><table>
-          <thead><tr><th></th><th>Batter</th><th>Matchup</th><th>Pitcher</th><th>Pick</th><th>Odds</th><th>Model P</th><th>Live</th><th>Edge</th><th>Book</th></tr></thead>
+          <thead><tr><th></th><th>Batter</th><th>Pick</th><th>Live</th><th>Matchup</th><th>Pitcher</th><th>Model P</th><th>Odds</th><th>Edge</th><th>Book</th></tr></thead>
           <tbody id="hr-picks-body"></tbody>
         </table></div>
         <div id="hr-picks-empty"></div>
@@ -522,12 +522,12 @@ function kPickRow(p,i){
   return `<tr class="${top}">
     <td style="width:3px;padding:0"></td>
     <td><div class="player-cell">${teamLogo(p.team,24)}<span class="player-name">${pName(p)}</span></div></td>
-    <td>${matchupHtml(p.team, p.opp, 'vs')}${timeHtml(p.time)}</td>
     <td>${p.line}</td>
     <td><span class="badge b-${p.pick}">${p.pick}</span></td>
-    <td class="muted">${p.odds}</td>
-    <td>${(+pModel(p)).toFixed(1)}</td>
     <td>${liveKHtml(pName(p), parseFloat(p.line), p.pick)}</td>
+    <td>${matchupHtml(p.team, p.opp, 'vs')}${timeHtml(p.time)}</td>
+    <td>${(+pModel(p)).toFixed(1)}</td>
+    <td class="muted">${p.odds}</td>
     <td>${edgeHtml(p.edge_val)}</td>
     <td><span class="book-tag">${p.book||'—'}</span></td>
   </tr>`;
@@ -538,12 +538,12 @@ function hrPickRow(p,i){
   return `<tr class="${top}">
     <td style="width:3px;padding:0"></td>
     <td><div class="player-cell">${teamLogo(p.team,24)}<span class="player-name">${pName(p)}</span></div></td>
+    <td><span class="badge b-yes">Yes</span></td>
+    <td>${liveHRHtml(pName(p))}</td>
     <td>${matchupHtml(away, home, '@')}${timeHtml(p.time)}</td>
     <td class="muted">${p.opp_pitcher||'—'}</td>
-    <td><span class="badge b-yes">Yes</span></td>
-    <td class="muted">${p.odds}</td>
     <td>${(pModel(p)*100).toFixed(1)}%</td>
-    <td>${liveHRHtml(pName(p))}</td>
+    <td class="muted">${p.odds}</td>
     <td>${edgeHtml(p.edge_val)}</td>
     <td><span class="book-tag">${p.book||'—'}</span></td>
   </tr>`;
