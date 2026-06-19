@@ -125,16 +125,46 @@ def normalize_hr_markets(raw: list[dict]) -> dict:
         if _f(m.get("floor_strike")) != 0.5:   # anytime HR only
             continue
         yb, ya = _f(m.get("yes_bid_dollars")), _f(m.get("yes_ask_dollars"))
+        nb, na = _f(m.get("no_bid_dollars")), _f(m.get("no_ask_dollars"))
         player = _player(m)
         idx[_normalize(player)] = {
             "player": player, "line": 0.5, "ticker": m.get("ticker"),
-            "yes_ask": ya,
+            "yes_ask": ya, "no_ask": na,
             "yes_cost": (ya + kalshi_fee(ya)) if ya is not None else None,
+            "no_cost": (na + kalshi_fee(na)) if na is not None else None,
             "yes_ok": _side_ok(m, yb, ya, _spread(yb, ya)),
             "volume": _f(m.get("volume_fp")), "open_interest": _f(m.get("open_interest_fp")),
             "spread": _spread(yb, ya), "status": m.get("status"),
         }
     return idx
+
+
+def source_hr_props(exclude: frozenset = frozenset()) -> list[dict]:
+    """
+    Build anytime-HR prop dicts from LIQUID Kalshi markets, for batters not already
+    covered (`exclude`). Used when FanDuel/DraftKings don't post HR lines, so Kalshi
+    is the market. Shape matches data/hr_odds.get_todays_hr_props() output.
+    """
+    out = []
+    try:
+        idx = normalize_hr_markets(get_mlb_markets(config.KALSHI_HR_SERIES))
+    except Exception as e:
+        print(f"[kalshi] HR source fetch failed: {e}")
+        return out
+    for norm, m in idx.items():
+        if norm in exclude or not m["yes_ok"] or m["yes_cost"] is None:
+            continue
+        yes_odds = american_from_prob(m["yes_cost"])
+        if yes_odds is None:
+            continue
+        no_cost = m.get("no_cost")
+        no_odds = american_from_prob(no_cost) if (no_cost is not None and 0 < no_cost < 1) else None
+        out.append({
+            "batter": m["player"], "home_team": "", "away_team": "", "line": 0.5,
+            "yes_odds": yes_odds, "yes_book": "Kalshi",
+            "no_odds": no_odds, "no_book": "Kalshi" if no_odds is not None else None,
+        })
+    return out
 
 
 def _better(kalshi_cost, cur_cost) -> bool:

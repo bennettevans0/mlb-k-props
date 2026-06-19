@@ -30,6 +30,35 @@ DEFAULT_LEAGUE_HR_PER9 = 1.20
 MIN_BATTER_PA = 20
 
 
+def _fix_mojibake(s: str) -> str:
+    """
+    Repair corrupted names from the BRef scrape so accented players match.
+    Two corruptions seen:
+      A) literal escape text: "Rodr\\xc3\\xadguez" (UTF-8 bytes were str()'d) -> un-escape
+      B) mojibake: "RodrÃ­guez" (UTF-8 read as Latin-1) -> re-encode latin-1, decode utf-8
+    Already-correct names (ASCII or real accents) are returned unchanged.
+    """
+    if not isinstance(s, str):
+        return s
+    if "\\x" in s:  # case A: literal backslash-x escape sequences
+        try:
+            s = s.encode("latin-1").decode("unicode_escape")
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            return s
+    try:  # case B: undo UTF-8-as-Latin-1 mojibake
+        return s.encode("latin-1").decode("utf-8")
+    except (UnicodeDecodeError, UnicodeEncodeError):
+        return s
+
+
+def _finalize_names(df: pd.DataFrame) -> pd.DataFrame:
+    """Repair mojibake and (re)compute the normalized lookup key. Run on every return
+    so even old/mojibake caches resolve accented names correctly."""
+    df["Name"] = df["Name"].astype(str).str.strip().map(_fix_mojibake)
+    df["_norm"] = df["Name"].map(_normalize)
+    return df
+
+
 def get_batting(season: int) -> pd.DataFrame:
     """Return a batter DataFrame with HR/PA and ISO, indexed for name lookup."""
     cache_file = CACHE_DIR / f"hr_batting_{season}.pkl"
@@ -37,7 +66,7 @@ def get_batting(season: int) -> pd.DataFrame:
 
     if cache_file.exists():
         print(f"[hr-stats] Loading batting stats from cache: {cache_file.name}")
-        return pd.read_pickle(cache_file)
+        return _finalize_names(pd.read_pickle(cache_file))
 
     print(f"[hr-stats] Fetching {season} Baseball Reference batting stats...")
     df = pybaseball.batting_stats_bref(season)
@@ -52,9 +81,7 @@ def get_batting(season: int) -> pd.DataFrame:
     df["ISO"] = (df["SLG"] - df["BA"]).clip(lower=0)
 
     keep = [c for c in ["Name", "Team", "PA", "AB", "HR", "BA", "SLG", "ISO", "HR_per_PA", "mlbID"] if c in df.columns]
-    df = df[keep].copy()
-    df["Name"] = df["Name"].astype(str).str.strip()
-    df["_norm"] = df["Name"].map(_normalize)
+    df = _finalize_names(df[keep].copy())
     df.to_pickle(cache_file)
     return df
 
@@ -66,7 +93,7 @@ def get_pitching_hr(season: int) -> pd.DataFrame:
 
     if cache_file.exists():
         print(f"[hr-stats] Loading pitcher HR stats from cache: {cache_file.name}")
-        return pd.read_pickle(cache_file)
+        return _finalize_names(pd.read_pickle(cache_file))
 
     print(f"[hr-stats] Fetching {season} Baseball Reference pitching stats (HR)...")
     df = pybaseball.pitching_stats_bref(season)
@@ -78,9 +105,7 @@ def get_pitching_hr(season: int) -> pd.DataFrame:
     df["HR_per9"] = (df["HR"] / df["IP"].replace(0, float("nan"))) * 9
 
     keep = [c for c in ["Name", "Team", "IP", "HR", "HR_per9"] if c in df.columns]
-    df = df[keep].copy()
-    df["Name"] = df["Name"].astype(str).str.strip()
-    df["_norm"] = df["Name"].map(_normalize)
+    df = _finalize_names(df[keep].copy())
     df.to_pickle(cache_file)
     return df
 

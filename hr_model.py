@@ -36,16 +36,26 @@ def run_hr_model(api_key: str, date_str: str, season: int, min_edge: float | Non
         min_edge = config.HR_EDGE_THRESHOLD
 
     props = get_todays_hr_props(api_key, date_str=date_str, use_cache=use_cache)
-    n_props = len(props)
-    if not props:
-        print("[hr] No anytime-HR props available (books may not have posted them yet).")
-        return pd.DataFrame(), 0
 
-    # Best-price line shopping: merge Kalshi prices (read-only) before edges.
+    # Best-price line shopping: merge Kalshi prices into FD/DK props (read-only).
     import kalshi_client
+    from data.starters import _normalize
     kalshi_rows = kalshi_client.best_price_hr(props)
     if dry_run:
         kalshi_client.print_price_table(kalshi_rows)
+
+    # Source HR props directly from Kalshi for batters FD/DK don't cover (the books
+    # frequently post no anytime-HR lines; Kalshi is then the market).
+    have = {_normalize(p["batter"]) for p in props}
+    sourced = kalshi_client.source_hr_props(exclude=have)
+    if sourced:
+        print(f"[hr] Sourced {len(sourced)} anytime-HR prop(s) from Kalshi (no FD/DK line).")
+        props += sourced
+
+    n_props = len(props)
+    if not props:
+        print("[hr] No anytime-HR props available (no FD/DK lines and no liquid Kalshi markets).")
+        return pd.DataFrame(), 0
 
     print(f"[hr] Found {n_props} anytime-HR props. Loading stats...")
     batting_df = hr_stats.get_batting(season)
