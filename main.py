@@ -263,18 +263,9 @@ def _cumulative_series(results: list[dict]) -> list[dict]:
     return out
 
 
-def export_site_data(
-    edges_df: pd.DataFrame,
-    date_str: str,
-    n_props: int,
-    pitching_df: pd.DataFrame | None = None,
-    starter_times: dict | None = None,
-    hr_edges_df: pd.DataFrame | None = None,
-    hr_n_props: int = 0,
-) -> None:
-    DOCS_DIR.mkdir(parents=True, exist_ok=True)
-
-    # Build pitcher->team lookup from savant data (fills team for old K results)
+def _build_results_payload(pitching_df: pd.DataFrame | None = None) -> dict:
+    """Build the {results, series} payload for results.json from results.csv."""
+    # pitcher->team lookup from savant data (fills team for old K results)
     pitcher_teams: dict[str, str] = {}
     if pitching_df is not None and not pitching_df.empty:
         for _, row in pitching_df.iterrows():
@@ -287,7 +278,7 @@ def export_site_data(
             if abbrev:
                 pitcher_teams[name.lower()] = abbrev
 
-    # Build (date, name) -> {team, opp, book} lookup from picks.csv (K and HR)
+    # (date, name) -> {team, opp, book} lookup from picks.csv (K and HR)
     pick_lookup: dict[tuple, dict] = {}
     if PICKS_CSV.exists():
         pdf = pd.read_csv(PICKS_CSV, dtype=str).fillna("")
@@ -299,30 +290,6 @@ def export_site_data(
                 "book": (row.get("book") or "").strip(),
             }
 
-    from data.starters import _normalize
-
-    # ---- Today's picks (K + HR), unified schema with prop_type ----
-    picks = []
-    if edges_df is not None and not edges_df.empty:
-        for _, row in edges_df[edges_df["_edge_val"] > 0].iterrows():
-            picks.append({
-                "prop_type": "K",
-                "name": row["Pitcher"],
-                "team": row.get("Team", ""),
-                "opp": row.get("Opp", ""),
-                "line": float(row["Line"]),
-                "pick": row["Side"].lower(),
-                "odds": row["Odds"],
-                "model": float(row["Proj K"]),           # projected Ks
-                "edge_val": round(float(row["_edge_val"]), 4),
-                "book": row.get("Book", ""),
-                "time": (starter_times or {}).get(_normalize(row["Pitcher"]), ""),
-            })
-    picks.extend(_hr_pick_dicts(hr_edges_df))
-    with open(DOCS_DIR / "today.json", "w") as f:
-        json.dump({"date": date_str, "picks": picks}, f, indent=2)
-
-    # ---- Graded results (K + HR), unified schema with prop_type ----
     results = []
     if RESULTS_CSV.exists():
         rdf = pd.read_csv(RESULTS_CSV, dtype=str).fillna("")
@@ -370,10 +337,70 @@ def export_site_data(
         "K": _cumulative_series(k_results),
         "HR": _cumulative_series(hr_results),
     }
-    with open(DOCS_DIR / "results.json", "w") as f:
-        json.dump({"results": results, "series": series}, f, indent=2)
+    return {"results": results, "series": series}
 
-    with open(DOCS_DIR / "meta.json", "w") as f:
+
+def nightly_site_refresh(date_str: str | None = None) -> None:
+    """
+    After the nightly grading run: fold the freshly-graded picks into the season
+    record (regenerate results.json) and clear Today's picks (blank today.json),
+    so the site shows no picks until the 8 AM run posts the new day's slate.
+    Leaves meta.json (last run / props checked) untouched.
+    """
+    if date_str is None:
+        date_str = date.today().isoformat()
+    DOCS_DIR.mkdir(parents=True, exist_ok=True)
+
+    with open(DOCS_DIR / "today.json", "w", encoding="utf-8") as f:
+        json.dump({"date": date_str, "picks": []}, f, indent=2)
+
+    payload = _build_results_payload(None)
+    with open(DOCS_DIR / "results.json", "w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2)
+
+    print(f"[nightly] Folded graded picks into season record; cleared Today's picks ({date_str}).")
+
+
+def export_site_data(
+    edges_df: pd.DataFrame,
+    date_str: str,
+    n_props: int,
+    pitching_df: pd.DataFrame | None = None,
+    starter_times: dict | None = None,
+    hr_edges_df: pd.DataFrame | None = None,
+    hr_n_props: int = 0,
+) -> None:
+    DOCS_DIR.mkdir(parents=True, exist_ok=True)
+
+    from data.starters import _normalize
+
+    # ---- Today's picks (K + HR), unified schema with prop_type ----
+    picks = []
+    if edges_df is not None and not edges_df.empty:
+        for _, row in edges_df[edges_df["_edge_val"] > 0].iterrows():
+            picks.append({
+                "prop_type": "K",
+                "name": row["Pitcher"],
+                "team": row.get("Team", ""),
+                "opp": row.get("Opp", ""),
+                "line": float(row["Line"]),
+                "pick": row["Side"].lower(),
+                "odds": row["Odds"],
+                "model": float(row["Proj K"]),           # projected Ks
+                "edge_val": round(float(row["_edge_val"]), 4),
+                "book": row.get("Book", ""),
+                "time": (starter_times or {}).get(_normalize(row["Pitcher"]), ""),
+            })
+    picks.extend(_hr_pick_dicts(hr_edges_df))
+    with open(DOCS_DIR / "today.json", "w", encoding="utf-8") as f:
+        json.dump({"date": date_str, "picks": picks}, f, indent=2)
+
+    # ---- Graded results + cumulative series ----
+    payload = _build_results_payload(pitching_df)
+    with open(DOCS_DIR / "results.json", "w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2)
+
+    with open(DOCS_DIR / "meta.json", "w", encoding="utf-8") as f:
         json.dump({
             "last_run": datetime.now().isoformat(timespec="seconds"),
             "props_checked": n_props,
