@@ -198,6 +198,21 @@
     .empty .s { font-size: 12px; }
     .sec-label { font-size: 11px; font-weight: 600; color: var(--gold-light); text-transform: uppercase; letter-spacing: .07em; padding: 13px 16px 4px; }
 
+    /* Today's-record banner */
+    .today-banner {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+      background: var(--felt); border: 1px solid var(--border); border-left: 3px solid var(--gold);
+      border-radius: var(--radius); box-shadow: var(--shadow); padding: 12px 18px; margin-bottom: 16px;
+    }
+    .tb-left { display: flex; align-items: center; gap: 9px; }
+    .tb-title { font-size: 12px; font-weight: 600; color: var(--gold-light); text-transform: uppercase; letter-spacing: .07em; }
+    .tb-note { font-size: 11px; color: var(--text-3); }
+    .tb-stats { display: flex; align-items: center; gap: 26px; }
+    .tb-stat { text-align: center; }
+    .tb-label { font-size: 10px; color: var(--text-2); text-transform: uppercase; letter-spacing: .05em; }
+    .tb-val { font-size: 19px; font-weight: 700; line-height: 1.1; color: var(--text); }
+    @media (max-width: 600px) { .tb-stats { gap: 18px; } }
+
     /* On phones: stack to one column and soften heavy glows for legibility */
     @media (max-width: 600px) {
       .header h1 { font-size: 28px; }
@@ -218,6 +233,20 @@
       <span class="muted" id="props-checked"></span>
     </div>
   </header>
+
+  <!-- ── Today's record (live finals; falls back to most recent graded day) ── -->
+  <div class="today-banner" id="today-banner" style="display:none;">
+    <div class="tb-left">
+      <span class="live-dot" id="tb-dot"></span>
+      <span class="tb-title" id="tb-title">Today</span>
+      <span class="tb-note" id="tb-note"></span>
+    </div>
+    <div class="tb-stats">
+      <div class="tb-stat"><div class="tb-label">Record</div><div class="tb-val" id="tb-record">—</div></div>
+      <div class="tb-stat"><div class="tb-label">Win rate</div><div class="tb-val" id="tb-winrate">—</div></div>
+      <div class="tb-stat"><div class="tb-label">Units</div><div class="tb-val" id="tb-units">—</div></div>
+    </div>
+  </div>
 
   <!-- ── Combined headline ── -->
   <div class="card combined-card">
@@ -429,6 +458,65 @@ function liveHRHtml(name){
   return `<div class="live-cell"><span class="live-num ${cls}">${label}</span>${st}</div>`;
 }
 
+// ── Today's record ──
+// Grades today's picks (K + HR combined) from live finals as games end. Before
+// any of today's games are final (e.g. the morning), it falls back to the most
+// recently graded day so it always shows the latest settled record.
+function gradeTodayLive(){
+  let w=0,l=0,p=0,u=0,graded=0;
+  for(const pk of todayPicks){
+    const nm=pName(pk).toLowerCase(); let res=null;
+    if(propType(pk)==='HR'){
+      const i=liveHR[nm];
+      if(i && i.status==='final') res = i.hr>=1 ? 'win' : 'loss';
+    } else {
+      const i=liveK[nm];
+      if(i && i.status==='final'){
+        const line=parseFloat(pk.line), k=i.k;
+        if(k===line) res='push';
+        else if(pk.pick==='over') res = k>line?'win':'loss';
+        else res = k<line?'win':'loss';
+      }
+    }
+    if(res){ graded++; if(res==='win'){ w++; u+=americanToProfit(pk.odds); } else if(res==='loss'){ l++; u-=1; } else p++; }
+  }
+  return {w,l,p,u,graded};
+}
+function recentGradedDay(){
+  const dated=allResults.filter(r=>r.date && ['win','loss','push'].includes(r.result));
+  if(!dated.length) return null;
+  const last=dated.reduce((m,r)=>r.date>m?r.date:m, dated[0].date);
+  const day=dated.filter(r=>r.date===last);
+  return {
+    date:last,
+    w:day.filter(r=>r.result==='win').length,
+    l:day.filter(r=>r.result==='loss').length,
+    p:day.filter(r=>r.result==='push').length,
+    u:day.reduce((s,r)=>s+(r.units||0),0),
+  };
+}
+function renderTodayBanner(){
+  const banner=document.getElementById('today-banner');
+  const live=gradeTodayLive();
+  let title, note, live_mode;
+  let w,l,p,u;
+  if(live.graded>0){
+    ({w,l,p,u}=live); title='Today'; note='live · updates as games go final'; live_mode=true;
+  } else {
+    const r=recentGradedDay();
+    if(!r){ banner.style.display='none'; return; }
+    w=r.w; l=r.l; p=r.p; u=r.u; title='Latest · '+fmtDate(r.date); note='most recent graded day'; live_mode=false;
+  }
+  banner.style.display='';
+  document.getElementById('tb-dot').style.display = live_mode ? '' : 'none';
+  document.getElementById('tb-title').textContent = title;
+  document.getElementById('tb-note').textContent = note;
+  document.getElementById('tb-record').textContent = `${w}–${l}`+(p?`–${p}`:'');
+  const wr=(w+l)>0?Math.round(w/(w+l)*100):0;
+  const wrEl=document.getElementById('tb-winrate'); wrEl.textContent=`${wr}%`; wrEl.className='tb-val '+(wr>=52?'pos':'neg');
+  const uEl=document.getElementById('tb-units'); uEl.textContent=(u>=0?'+':'')+u.toFixed(2)+'u'; uEl.className='tb-val '+(u>=0?'pos':'neg');
+}
+
 // ── Count-up animation (load only; honors reduced-motion) ──
 const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 function countUp(el){
@@ -448,7 +536,7 @@ function countUp(el){
 }
 function runCountUps(){
   if(reduceMotion) return;
-  ['combined-total','k-units','hr-units','k-winrate','hr-winrate','k-chart-big','hr-chart-big']
+  ['combined-total','tb-winrate','tb-units','k-units','hr-units','k-winrate','hr-winrate','k-chart-big','hr-chart-big']
     .forEach(id=>countUp(document.getElementById(id)));
 }
 
@@ -468,7 +556,7 @@ async function load(){
   await fetchLive(picksDate);
   renderAll();
   runCountUps();
-  setInterval(async()=>{ await fetchLive(picksDate); renderPicks(); }, 120000);
+  setInterval(async()=>{ await fetchLive(picksDate); renderPicks(); renderTodayBanner(); }, 120000);
 }
 
 // ── Cumulative series (client-side, period-aware) ──
@@ -653,6 +741,7 @@ function renderMeta(){
 function renderCharts(){ renderCombined(); makeChart('chartK', statsFor('K').rs, 'K'); makeChart('chartHR', statsFor('HR').rs, 'HR'); }
 function renderAll(){
   renderMeta();
+  renderTodayBanner();
   renderSideStats('K', {rec:'k-record',void:'k-void',wr:'k-winrate',units:'k-units',big:'k-chart-big'});
   renderSideStats('HR', {rec:'hr-record',void:'hr-void',wr:'hr-winrate',units:'hr-units',big:'hr-chart-big'});
   renderCharts();
