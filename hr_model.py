@@ -25,7 +25,8 @@ from model.hr_edge import find_hr_edges
 HIDDEN_COLS = ["_edge_val", "_raw_odds", "_model_p", "_park", "_pitcher_factor", "_time", "_home", "_away"]
 
 
-def run_hr_model(api_key: str, date_str: str, season: int, min_edge: float | None = None, use_cache: bool = True):
+def run_hr_model(api_key: str, date_str: str, season: int, min_edge: float | None = None,
+                 use_cache: bool = True, dry_run: bool = False):
     """
     Run the HR model for a date.
     Returns (edges_df, n_props). edges_df may be empty (no lines / no edges).
@@ -39,6 +40,12 @@ def run_hr_model(api_key: str, date_str: str, season: int, min_edge: float | Non
     if not props:
         print("[hr] No anytime-HR props available (books may not have posted them yet).")
         return pd.DataFrame(), 0
+
+    # Best-price line shopping: merge Kalshi prices (read-only) before edges.
+    import kalshi_client
+    kalshi_rows = kalshi_client.best_price_hr(props)
+    if dry_run:
+        kalshi_client.print_price_table(kalshi_rows)
 
     print(f"[hr] Found {n_props} anytime-HR props. Loading stats...")
     batting_df = hr_stats.get_batting(season)
@@ -75,7 +82,8 @@ def main():
     date_str = args.date or today.isoformat()
     season = int(date_str[:4])
 
-    edges_df, n_props = run_hr_model(api_key, date_str, season, min_edge=args.min_edge)
+    edges_df, n_props = run_hr_model(api_key, date_str, season, min_edge=args.min_edge,
+                                     use_cache=False, dry_run=True)
 
     print()
     if edges_df.empty:

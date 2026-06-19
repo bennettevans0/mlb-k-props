@@ -13,6 +13,23 @@ HR_EDGE_THRESHOLD = 0.05
 # batting-order spot isn't posted yet). Refined by lineup spot when available.
 HR_DEFAULT_PA = 4.2
 
+# --- Kalshi (read-only price source for best-price line shopping) ---
+# Market data is PUBLIC: no API key, no request signing needed for reading prices.
+KALSHI_BASE = "https://api.elections.kalshi.com/trade-api/v2"
+KALSHI_K_SERIES = "KXMLBKS"     # per-game pitcher strikeout markets
+KALSHI_HR_SERIES = "KXMLBHR"    # per-game batter home-run markets
+# Liquidity guard: a Kalshi price is only eligible to be "best" if the market is
+# tradeable, deep enough, and tight enough that it could actually be filled.
+KALSHI_MIN_OPEN_INTEREST = 50      # contracts (open_interest, fp)
+KALSHI_MAX_SPREAD_CENTS = 5        # max yes bid/ask spread, in cents
+# Tie-break on equal implied cost: prefer FanDuel/DraftKings (deeper liquidity).
+KALSHI_TIEBREAK_PREFER_ODDSAPI = True
+# Fees: add Kalshi's per-contract fee to its cost BEFORE comparing (apples-to-
+# apples). Historical sports fee ~= 0.07 * p * (1 - p); set ENABLED=False to zero
+# it out if the current schedule is free. Conservative default: apply the fee.
+KALSHI_FEE_ENABLED = True
+KALSHI_FEE_COEF = 0.07
+
 TEAM_NAME_TO_ABBREV = {
     "Arizona Diamondbacks": "ARI",
     "Atlanta Braves": "ATL",

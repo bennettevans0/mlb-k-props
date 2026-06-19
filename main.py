@@ -434,6 +434,8 @@ def main():
                         help="Show only top N results")
     parser.add_argument("--date", type=str, default=None,
                         help="Date to fetch props for (YYYY-MM-DD, default: today)")
+    parser.add_argument("--dry-run", action="store_true",
+                        help="Print picks + 3-way price tables; do NOT email, log, grade, or publish")
     args = parser.parse_args()
 
     api_key = config.get_api_key()
@@ -457,6 +459,13 @@ def main():
         print(f"[main] Found {n_props} pitcher props. Loading stats...")
         pitching_df = get_season_pitching(season)
         team_k_rates, league_k_rate = get_team_k_rates(season)
+
+        # Best-price line shopping: merge Kalshi prices (read-only) into the props
+        # before computing edges, so the best price across FD/DK/Kalshi is used.
+        import kalshi_client
+        kalshi_rows = kalshi_client.best_price_k(props)
+        if args.dry_run:
+            kalshi_client.print_price_table(kalshi_rows)
 
         edges_df = find_edges(
             props, pitching_df, team_k_rates, league_k_rate, min_edge=args.min_edge,
@@ -491,7 +500,8 @@ def main():
     # ---------------- HR model (separate module) ----------------
     print("\n[main] Running anytime-HR model...")
     try:
-        hr_edges_df, hr_n_props = run_hr_model(api_key, date_str, int(date_str[:4]))
+        hr_edges_df, hr_n_props = run_hr_model(api_key, date_str, int(date_str[:4]),
+                                               use_cache=not args.dry_run, dry_run=args.dry_run)
     except Exception as exc:
         # Never let an HR failure break the K pipeline.
         print(f"[main] HR model error (skipping HR): {exc}")
@@ -504,6 +514,10 @@ def main():
         print("No anytime-HR picks.")
 
     # ---------------- Email / log / grade / publish ----------------
+    if args.dry_run:
+        print("\n[dry-run] Skipping email, picks log, grading, site export, and publish.")
+        return
+
     if config.GMAIL_USER and config.GMAIL_PASSWORD:
         from notify.email import send_picks
         send_picks(
