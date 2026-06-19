@@ -4,6 +4,15 @@ ODDS_API_BASE = "https://api.the-odds-api.com/v4"
 EDGE_THRESHOLD = 0.05
 MIN_IP_FILTER = 25
 
+# --- Anytime HR model (separate from the K model) ---
+# Minimum model-vs-market edge for an anytime-HR pick. Kept the same as the K
+# threshold to start. HR edges are noisier/smaller, so do NOT tune this until
+# there is a meaningful sample of graded HR picks.
+HR_EDGE_THRESHOLD = 0.05
+# Default expected plate appearances for a starting-lineup batter (used when the
+# batting-order spot isn't posted yet). Refined by lineup spot when available.
+HR_DEFAULT_PA = 4.2
+
 TEAM_NAME_TO_ABBREV = {
     "Arizona Diamondbacks": "ARI",
     "Atlanta Braves": "ATL",
@@ -36,6 +45,17 @@ TEAM_NAME_TO_ABBREV = {
     "Texas Rangers": "TEX",
     "Toronto Blue Jays": "TOR",
     "Washington Nationals": "WSN",
+}
+
+
+# MLB Stats API team id -> abbreviation, using the SAME abbreviation style the K
+# side already uses (CHW/KCR/SDP/SFG/TBR/WSN) so K and HR rows match on the site.
+TEAM_ID_TO_ABBREV = {
+    109: "ARI", 144: "ATL", 110: "BAL", 111: "BOS", 112: "CHC", 145: "CHW",
+    113: "CIN", 114: "CLE", 115: "COL", 116: "DET", 117: "HOU", 118: "KCR",
+    108: "LAA", 119: "LAD", 146: "MIA", 158: "MIL", 142: "MIN", 121: "NYM",
+    147: "NYY", 133: "OAK", 143: "PHI", 134: "PIT", 135: "SDP", 137: "SFG",
+    136: "SEA", 138: "STL", 139: "TBR", 140: "TEX", 141: "TOR", 120: "WSN",
 }
 
 

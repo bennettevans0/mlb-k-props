@@ -3,1072 +3,613 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>MLB K Props</title>
+  <title>MLB Props — K &amp; HR</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #f5f5f3;
+      --bg: #f4f5f7;
       --surface: #ffffff;
+      --surface-2: #fafafa;
       --border: rgba(0,0,0,0.08);
       --border-strong: rgba(0,0,0,0.14);
-      --text: #1a1a1a;
-      --text-2: #6b6b6b;
-      --text-3: #999;
-      --green: #3B6D11;
-      --green-light: #EAF3DE;
-      --green-mid: #97C459;
-      --red: #A32D2D;
-      --red-light: #FCEBEB;
+      --text: #16181d;
+      --text-2: #5b616e;
+      --text-3: #9aa0ac;
+      --green: #2f7d33;
+      --green-soft: #eaf4e9;
+      --red: #c0392b;
+      --red-soft: #fbeceb;
       --blue: #185FA5;
-      --blue-light: #E6F1FB;
-      --accent: #639922;
-      --radius: 14px;
-      --radius-sm: 8px;
+      --blue-soft: #e7f0fa;
+      /* per-side accents */
+      --k-accent: #2f7d33;       /* strikeouts = green */
+      --k-soft: #eaf4e9;
+      --hr-accent: #d9622b;      /* home runs = orange */
+      --hr-soft: #fceee6;
+      --radius: 16px;
+      --radius-sm: 9px;
       --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
     }
-
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #111110;
-        --surface: #1c1c1a;
-        --border: rgba(255,255,255,0.08);
-        --border-strong: rgba(255,255,255,0.14);
-        --text: #e8e8e6;
-        --text-2: #9a9a96;
-        --text-3: #666;
-        --green: #97C459;
-        --green-light: rgba(99,153,34,0.15);
-        --green-mid: #97C459;
-        --red: #e07070;
-        --red-light: rgba(163,45,45,0.15);
+        --bg: #0f1012;
+        --surface: #1a1c1f;
+        --surface-2: #202327;
+        --border: rgba(255,255,255,0.09);
+        --border-strong: rgba(255,255,255,0.16);
+        --text: #e9eaec;
+        --text-2: #a0a4ad;
+        --text-3: #6b7079;
+        --green: #6cc070;
+        --green-soft: rgba(47,125,51,0.18);
+        --red: #e57368;
+        --red-soft: rgba(192,57,43,0.18);
         --blue: #6aaee8;
-        --blue-light: rgba(24,95,165,0.18);
-        --accent: #97C459;
-        --shadow: 0 1px 3px rgba(0,0,0,0.3);
+        --blue-soft: rgba(24,95,165,0.20);
+        --k-accent: #6cc070;
+        --k-soft: rgba(47,125,51,0.16);
+        --hr-accent: #f08a52;
+        --hr-soft: rgba(217,98,43,0.16);
+        --shadow: 0 1px 3px rgba(0,0,0,0.4);
       }
     }
 
     body {
       font-family: 'Inter', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      font-size: 14px;
-      line-height: 1.5;
-      min-height: 100vh;
-      padding: 0 0 60px;
+      background: var(--bg); color: var(--text);
+      font-size: 14px; line-height: 1.5; min-height: 100vh; padding: 0 0 60px;
     }
-
-    .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 18px; }
 
     .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 28px 0 24px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 28px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 26px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 22px; gap: 12px; flex-wrap: wrap;
     }
-    .header h1 { font-size: 18px; font-weight: 600; letter-spacing: -0.3px; }
+    .header h1 { font-size: 19px; font-weight: 700; letter-spacing: -0.4px; }
+    .header h1 .sub { font-weight: 500; color: var(--text-2); }
     .header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
     .last-run { font-size: 12px; color: var(--text-2); }
     .live-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green); margin-right: 5px; animation: pulse 2s infinite; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-
-    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
-    @media (max-width: 600px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
-    .stat-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px 18px;
-      box-shadow: var(--shadow);
-    }
-    .stat-label { font-size: 11px; font-weight: 500; color: var(--text-2); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 8px; }
-    .stat-value { font-size: 28px; font-weight: 600; line-height: 1; letter-spacing: -1px; }
-    .stat-sub { font-size: 11px; color: var(--text-3); margin-top: 5px; }
-    .pos { color: var(--green); }
-    .neg { color: var(--red); }
-
-    .streak-row { display: flex; gap: 4px; margin-top: 8px; flex-wrap: wrap; }
-    .s-chip {
-      width: 22px; height: 22px; border-radius: 50%;
-      font-size: 10px; font-weight: 600;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .s-w { background: var(--green-light); color: var(--green); }
-    .s-l { background: var(--red-light); color: var(--red); }
-    .s-v { background: var(--border); color: var(--text-3); }
+    .muted { color: var(--text-2); font-size: 12px; }
 
     .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      margin-bottom: 16px;
-      overflow: hidden;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 16px; overflow: hidden;
     }
     .card-header {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 16px 20px 14px;
-      border-bottom: 1px solid var(--border);
+      padding: 15px 18px 13px; border-bottom: 1px solid var(--border);
     }
-    .card-title { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
-    .card-title svg { opacity: .5; }
-    .card-pills { display: flex; gap: 8px; align-items: center; }
-    .pill {
-      font-size: 11px; font-weight: 500; padding: 3px 10px;
-      border-radius: 99px; white-space: nowrap;
-    }
+    .card-title { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; letter-spacing: -0.1px; }
+    .card-pills { display: flex; gap: 7px; align-items: center; }
+    .pill { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 99px; white-space: nowrap; }
     .pill-date { background: var(--border); color: var(--text-2); }
-    .pill-count { background: var(--green-light); color: var(--green); }
-    .pill-none { background: var(--border); color: var(--text-3); }
 
-    .chart-section { padding: 20px 20px 16px; }
-    .chart-top { margin-bottom: 16px; }
-    .chart-big { font-size: 34px; font-weight: 600; letter-spacing: -1.5px; line-height: 1; }
-    .chart-change { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
-    .chart-change-val { font-size: 13px; font-weight: 500; }
-    .chart-change-label { font-size: 13px; color: var(--text-2); }
-    .chart-wrap { position: relative; }
-    canvas#unitsChart { display: block; width: 100% !important; }
-    .chart-crosshair { position: absolute; top: 0; width: 1px; background: var(--border-strong); pointer-events: none; display: none; }
-    .chart-dot { position: absolute; width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--surface); transform: translate(-50%, -50%); pointer-events: none; display: none; }
-    .period-row { display: flex; gap: 4px; margin-top: 14px; }
+    /* ── Combined headline ───────────────────────────── */
+    .combined-card .card-header { border-bottom: none; padding-bottom: 0; }
+    .combined-top { padding: 4px 20px 6px; }
+    .combined-label { font-size: 12px; font-weight: 600; color: var(--text-2); text-transform: uppercase; letter-spacing: .06em; }
+    .combined-big { font-size: 40px; font-weight: 700; letter-spacing: -1.6px; line-height: 1.05; }
+    .combined-meta { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 4px; font-size: 12.5px; color: var(--text-2); }
+    .combined-meta b { color: var(--text); font-weight: 600; }
+    .chart-section { padding: 8px 14px 16px; }
+    canvas { display: block; width: 100% !important; }
+    .period-row { display: flex; gap: 5px; padding: 0 20px 16px; }
     .period-btn {
-      font-size: 12px; font-weight: 500; padding: 5px 13px; border-radius: 99px;
-      border: none; background: transparent; color: var(--text-2); cursor: pointer;
-      font-family: inherit;
+      font-size: 12px; font-weight: 500; padding: 5px 14px; border-radius: 99px;
+      border: 1px solid var(--border-strong); background: transparent; color: var(--text-2); cursor: pointer; font-family: inherit;
     }
-    .period-btn:hover { background: var(--border); color: var(--text); }
-    .period-btn.active { background: var(--border-strong); color: var(--text); }
+    .period-btn:hover { color: var(--text); }
+    .period-btn.active { background: var(--text); color: var(--surface); border-color: var(--text); }
+
+    /* ── Two sides ───────────────────────────── */
+    .sides { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+    @media (max-width: 860px) { .sides { grid-template-columns: 1fr; } }
+
+    .side { border-radius: var(--radius); min-width: 0; }   /* allow grid item to shrink so wide tables scroll, not overflow */
+    .side-head {
+      display: flex; align-items: center; gap: 9px; margin: 4px 2px 12px; padding-bottom: 10px;
+    }
+    .side-head .badge-ico { font-size: 18px; }
+    .side-head h2 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; }
+    .side-k .side-head { border-bottom: 3px solid var(--k-accent); }
+    .side-hr .side-head { border-bottom: 3px solid var(--hr-accent); }
+    .side-k .side-head h2 { color: var(--k-accent); }
+    .side-hr .side-head h2 { color: var(--hr-accent); }
+
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 13px; box-shadow: var(--shadow); }
+    .stat-label { font-size: 10px; font-weight: 600; color: var(--text-2); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
+    .stat-value { font-size: 22px; font-weight: 700; line-height: 1; letter-spacing: -0.6px; }
+    .stat-sub { font-size: 10.5px; color: var(--text-3); margin-top: 4px; }
+    .pos { color: var(--green); } .neg { color: var(--red); }
+
+    .side-chart-head { display:flex; align-items:baseline; justify-content:space-between; padding: 14px 16px 0; }
+    .side-chart-big { font-size: 24px; font-weight: 700; letter-spacing: -0.8px; }
+    .side-chart-sub { font-size: 11px; color: var(--text-3); }
 
     .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th {
-      text-align: left; font-size: 11px; font-weight: 500;
-      color: var(--text-2); padding: 9px 12px;
-      background: var(--bg); border-bottom: 1px solid var(--border);
-      white-space: nowrap;
-    }
-    td { padding: 11px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+    th { text-align: left; font-size: 10.5px; font-weight: 600; color: var(--text-2); padding: 9px 10px; background: var(--surface-2); border-bottom: 1px solid var(--border); white-space: nowrap; text-transform: uppercase; letter-spacing: .03em; }
+    td { padding: 10px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; white-space: nowrap; }
     tr:last-child td { border-bottom: none; }
-    tr.top-pick td { background: rgba(99,153,34,0.04); }
+    .side-k tr.top-pick td { background: var(--k-soft); }
+    .side-hr tr.top-pick td { background: var(--hr-soft); }
 
-    .pitcher-cell { display: flex; align-items: center; gap: 9px; }
-    .team-badge {
-      border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      font-size: 8px; font-weight: 700; flex-shrink: 0; letter-spacing: -0.02em;
-    }
-    .pitcher-name { font-weight: 500; }
+    .player-cell { display: flex; align-items: center; gap: 8px; }
+    .player-name { font-weight: 600; white-space: nowrap; }
 
-    .matchup { display: flex; align-items: center; gap: 4px; }
-    .matchup-vs { font-size: 10px; color: var(--text-3); }
-    .matchup-time { font-size: 10px; color: var(--text-3); margin-top: 2px; }
+    /* logos */
+    .logo-plate { display: inline-flex; align-items: center; justify-content: center; background: #ffffff; border: 1px solid rgba(0,0,0,0.10); border-radius: 6px; flex-shrink: 0; overflow: hidden; }
+    .logo-plate img { display:block; }
+    .abbr-fallback { display:inline-flex; align-items:center; justify-content:center; min-width: 24px; height: 24px; padding: 0 5px; font-size: 10px; font-weight: 700; background: var(--surface-2); border: 1px solid var(--border-strong); border-radius: 6px; color: var(--text); }
+    .matchup { display: inline-flex; align-items: center; gap: 5px; }
+    .team-chip { display: inline-flex; align-items: center; gap: 3px; }
+    .chip-abbr { font-size: 11px; font-weight: 600; color: var(--text-2); }
+    .mvs { font-size: 10px; color: var(--text-3); font-weight: 600; }
+    .matchup-time { font-size: 10px; color: var(--text-3); margin-top: 3px; }
 
-    .badge {
-      display: inline-flex; align-items: center;
-      font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 99px; white-space: nowrap;
-    }
-    .b-over  { background: var(--green-light); color: var(--green); }
-    .b-under { background: var(--blue-light); color: var(--blue); }
-    .b-win   { background: var(--green-light); color: var(--green); }
-    .b-loss  { background: var(--red-light); color: var(--red); }
-    .b-void  { background: var(--border); color: var(--text-3); }
+    .badge { display: inline-flex; align-items: center; font-size: 10.5px; font-weight: 600; padding: 3px 9px; border-radius: 99px; white-space: nowrap; text-transform: capitalize; }
+    .b-over, .b-yes { background: var(--green-soft); color: var(--green); }
+    .b-under { background: var(--blue-soft); color: var(--blue); }
+    .b-win { background: var(--green-soft); color: var(--green); }
+    .b-loss { background: var(--red-soft); color: var(--red); }
+    .b-push, .b-void { background: var(--border); color: var(--text-3); }
 
-    .edge-cell { display: flex; align-items: center; gap: 8px; min-width: 90px; }
-    .edge-val { font-weight: 600; color: var(--green); font-size: 12px; min-width: 36px; }
+    .edge-cell { display: flex; align-items: center; gap: 7px; min-width: 84px; }
+    .edge-val { font-weight: 700; font-size: 11.5px; min-width: 34px; }
+    .side-k .edge-val { color: var(--k-accent); } .side-hr .edge-val { color: var(--hr-accent); }
     .edge-bar-bg { flex: 1; height: 5px; background: var(--border); border-radius: 99px; overflow: hidden; }
-    .edge-bar-fill { height: 100%; border-radius: 99px; background: var(--green-mid); }
+    .edge-bar-fill { height: 100%; border-radius: 99px; }
+    .side-k .edge-bar-fill { background: var(--k-accent); } .side-hr .edge-bar-fill { background: var(--hr-accent); }
 
-    .book-tag {
-      font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 5px;
-      border: 1px solid var(--border-strong); color: var(--text-2);
-      white-space: nowrap;
-    }
+    .book-tag { font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 5px; border: 1px solid var(--border-strong); color: var(--text-2); white-space: nowrap; }
+    .units-pos { font-weight: 600; color: var(--green); } .units-neg { font-weight: 600; color: var(--red); }
 
-    .units-pos { font-weight: 500; color: var(--green); }
-    .units-neg { font-weight: 500; color: var(--red); }
-    .muted { color: var(--text-2); font-size: 12px; }
-
-    .accent-left { width: 3px; height: 32px; border-radius: 99px; flex-shrink: 0; }
-
-    .filter-row {
-      display: flex; gap: 6px; flex-wrap: wrap;
-      padding: 12px 20px; border-bottom: 1px solid var(--border);
-      background: var(--bg);
-    }
-    .filter-btn {
-      font-size: 12px; font-weight: 500; padding: 5px 13px; border-radius: 99px;
-      border: 1px solid var(--border-strong); background: var(--surface);
-      color: var(--text-2); cursor: pointer; font-family: inherit;
-    }
-    .filter-btn:hover { border-color: var(--text-3); color: var(--text); }
-    .filter-btn.active { background: var(--green); color: #fff; border-color: var(--green); }
-
-    .empty-state { padding: 48px 24px; text-align: center; }
-    .empty-icon { font-size: 36px; margin-bottom: 12px; opacity: .4; }
-    .empty-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
-    .empty-sub { font-size: 13px; color: var(--text-2); }
-
-    .no-data { padding: 32px; text-align: center; color: var(--text-3); font-size: 13px; }
-
-    /* Live K cell styles */
-    .live-k-cell { display: flex; align-items: center; gap: 5px; }
-    .live-k-num { font-weight: 600; font-size: 13px; }
-    .live-k-num.on-pace-win { color: var(--green); }
-    .live-k-num.on-pace-loss { color: var(--red); }
-    .live-k-num.final { color: var(--text); }
-    .live-status {
-      font-size: 9px; font-weight: 600; padding: 2px 5px; border-radius: 4px;
-      text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap;
-    }
-    .live-status.in-progress { background: #FFF3CD; color: #856404; }
+    .live-cell { display: flex; align-items: center; gap: 5px; }
+    .live-num { font-weight: 700; font-size: 12.5px; }
+    .live-num.win { color: var(--green); } .live-num.loss { color: var(--red); } .live-num.final { color: var(--text); }
+    .live-status { font-size: 8.5px; font-weight: 700; padding: 2px 5px; border-radius: 4px; text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; }
+    .live-status.in-progress { background: #fff3cd; color: #856404; }
     .live-status.final { background: var(--border); color: var(--text-3); }
-    .live-status.scheduled { background: var(--border); color: var(--text-3); }
-    .live-refresh { font-size: 10px; color: var(--text-3); margin-left: 4px; }
+
+    .empty { padding: 30px 18px; text-align: center; color: var(--text-3); }
+    .empty .ico { font-size: 30px; opacity: .45; margin-bottom: 8px; }
+    .empty .t { font-size: 14px; font-weight: 600; color: var(--text-2); margin-bottom: 4px; }
+    .empty .s { font-size: 12px; }
+    .sec-label { font-size: 11px; font-weight: 600; color: var(--text-2); text-transform: uppercase; letter-spacing: .05em; padding: 13px 16px 4px; }
   </style>
 </head>
 <body>
 <div class="container">
 
   <header class="header">
-    <h1>⚾ MLB K Props</h1>
+    <h1>⚾ MLB Props <span class="sub">· K &amp; HR model</span></h1>
     <div class="header-right">
       <span class="last-run"><span class="live-dot"></span>Last run: <span id="last-run-time">—</span></span>
       <span class="muted" id="props-checked"></span>
     </div>
   </header>
 
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-label">Season record</div>
-      <div class="stat-value" id="stat-record">—</div>
-      <div class="stat-sub" id="stat-void"></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Win rate</div>
-      <div class="stat-value pos" id="stat-winrate">—</div>
-      <div class="stat-sub">vs ~52% breakeven</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Total units</div>
-      <div class="stat-value" id="stat-units">—</div>
-      <div class="stat-sub">flat 1u stakes</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Recent streak</div>
-      <div class="streak-row" id="streak-row"></div>
-    </div>
-  </div>
-
-  <!-- Today live stats banner -->
-  <div id="today-live-banner" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 18px;margin-bottom:16px;">
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <span class="live-dot"></span>
-        <span style="font-weight:600;font-size:13px;">Today (live)</span>
-        <span style="font-size:11px;color:var(--text-3);">finals only · updates as games end</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:24px;">
-        <div style="text-align:center;">
-          <div style="font-size:10px;color:var(--text-2);text-transform:uppercase;letter-spacing:.05em;">Record</div>
-          <div id="today-record" style="font-size:18px;font-weight:600;">—</div>
-        </div>
-        <div style="text-align:center;">
-          <div style="font-size:10px;color:var(--text-2);text-transform:uppercase;letter-spacing:.05em;">Win rate</div>
-          <div id="today-winrate" style="font-size:18px;font-weight:600;">—</div>
-        </div>
-        <div style="text-align:center;">
-          <div style="font-size:10px;color:var(--text-2);text-transform:uppercase;letter-spacing:.05em;">Units</div>
-          <div id="today-units" style="font-size:18px;font-weight:600;">—</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Today live stats banner -->
-  <div id="today-live-banner" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 18px;margin-bottom:16px;">
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <span class="live-dot"></span>
-        <span style="font-weight:600;font-size:13px;">Today (live)</span>
-        <span style="font-size:11px;color:var(--text-3);">finals only · updates as games end</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:24px;">
-        <div style="text-align:center;">
-          <div style="font-size:10px;color:var(--text-2);text-transform:uppercase;letter-spacing:.05em;">Record</div>
-          <div id="today-record" style="font-size:18px;font-weight:600;">—</div>
-        </div>
-        <div style="text-align:center;">
-          <div style="font-size:10px;color:var(--text-2);text-transform:uppercase;letter-spacing:.05em;">Win rate</div>
-          <div id="today-winrate" style="font-size:18px;font-weight:600;">—</div>
-        </div>
-        <div style="text-align:center;">
-          <div style="font-size:10px;color:var(--text-2);text-transform:uppercase;letter-spacing:.05em;">Units</div>
-          <div id="today-units" style="font-size:18px;font-weight:600;">—</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Chart -->
-  <div class="card">
+  <!-- ── Combined headline ── -->
+  <div class="card combined-card">
     <div class="card-header">
-      <span class="card-title">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
-        Units over time
-      </span>
+      <span class="card-title">📈 Combined units over time</span>
+      <div class="card-pills"><span class="pill pill-date" id="combined-date"></span></div>
     </div>
-    <div class="chart-section">
-      <div class="chart-top">
-        <div class="chart-big" id="chart-big">—</div>
-        <div class="chart-change">
-          <span class="chart-change-val pos" id="chart-change-val"></span>
-          <span class="chart-change-label" id="chart-change-label"></span>
-        </div>
-      </div>
-      <div class="chart-wrap">
-        <canvas id="unitsChart" height="160"></canvas>
-        <div class="chart-crosshair" id="crosshair"></div>
-        <div class="chart-dot" id="chart-dot"></div>
-      </div>
-      <div class="period-row">
-        <button class="period-btn" onclick="setPeriod('1W',this)">1W</button>
-        <button class="period-btn" onclick="setPeriod('1M',this)">1M</button>
-        <button class="period-btn active" onclick="setPeriod('ALL',this)">All</button>
-      </div>
+    <div class="combined-top">
+      <div class="combined-label">Total units (K + HR)</div>
+      <div class="combined-big" id="combined-total">—</div>
+      <div class="combined-meta" id="combined-meta"></div>
+    </div>
+    <div class="chart-section"><canvas id="chartCombined" height="150"></canvas></div>
+    <div class="period-row">
+      <button class="period-btn" data-p="1W" onclick="setPeriod('1W',this)">1W</button>
+      <button class="period-btn" data-p="1M" onclick="setPeriod('1M',this)">1M</button>
+      <button class="period-btn active" data-p="ALL" onclick="setPeriod('ALL',this)">All</button>
     </div>
   </div>
 
-  <!-- Today's picks -->
-  <div class="card" id="picks-card">
-    <div class="card-header">
-      <span class="card-title">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-        Today's picks
-      </span>
-      <div class="card-pills">
-        <span class="pill pill-count" id="picks-count"></span>
-        <span class="pill pill-date" id="picks-date"></span>
-        <span class="live-refresh" id="live-refresh-label"></span>
+  <!-- ── Two sides ── -->
+  <div class="sides">
+
+    <!-- K SIDE -->
+    <section class="side side-k">
+      <div class="side-head"><span class="badge-ico">⚾</span><h2>Strikeouts</h2></div>
+
+      <div class="stat-row">
+        <div class="stat-card"><div class="stat-label">Record</div><div class="stat-value" id="k-record">—</div><div class="stat-sub" id="k-void"></div></div>
+        <div class="stat-card"><div class="stat-label">Win rate</div><div class="stat-value" id="k-winrate">—</div><div class="stat-sub">vs ~52% BE</div></div>
+        <div class="stat-card"><div class="stat-label">Units</div><div class="stat-value" id="k-units">—</div><div class="stat-sub">flat 1u</div></div>
       </div>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th style="width:4px;padding-right:0;"></th>
-            <th>Pitcher</th>
-            <th>Matchup</th>
-            <th>Line</th>
-            <th>Pick</th>
-            <th>Odds</th>
-            <th>Proj K</th>
-            <th>Live K</th>
-            <th>Edge</th>
-            <th>Book</th>
-          </tr>
-        </thead>
-        <tbody id="picks-tbody"></tbody>
-      </table>
-    </div>
-  </div>
 
-  <!-- Empty state -->
-  <div class="card" id="empty-card" style="display:none;">
-    <div class="card-header">
-      <span class="card-title">Today's picks</span>
-      <div class="card-pills">
-        <span class="pill pill-date" id="empty-date"></span>
+      <div class="card">
+        <div class="side-chart-head"><span class="side-chart-big" id="k-chart-big">—</span><span class="side-chart-sub">K units</span></div>
+        <div class="chart-section"><canvas id="chartK" height="120"></canvas></div>
       </div>
-    </div>
-    <div class="empty-state">
-      <div class="empty-icon">📭</div>
-      <div class="empty-title">No edges found today</div>
-      <div class="empty-sub" id="empty-sub">Model ran — no picks cleared the threshold.</div>
-    </div>
-  </div>
 
-  <!-- Recent results -->
-  <div class="card">
-    <div class="card-header">
-      <span class="card-title">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        Recent results
-      </span>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Pitcher</th>
-            <th>Matchup</th>
-            <th>Line</th>
-            <th>Pick</th>
-            <th>Actual K</th>
-            <th>Result</th>
-            <th>Units</th>
-            <th>Book</th>
-          </tr>
-        </thead>
-        <tbody id="recent-tbody"></tbody>
-      </table>
-    </div>
-  </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Today's K picks</span><div class="card-pills"><span class="pill pill-date" id="k-picks-count"></span></div></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th></th><th>Pitcher</th><th>Matchup</th><th>Line</th><th>Pick</th><th>Odds</th><th>Proj K</th><th>Live K</th><th>Edge</th><th>Book</th></tr></thead>
+          <tbody id="k-picks-body"></tbody>
+        </table></div>
+        <div id="k-picks-empty"></div>
+      </div>
 
-  <!-- All picks -->
-  <div class="card">
-    <div class="card-header">
-      <span class="card-title">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-        All picks
-      </span>
-      <span class="muted" id="all-count-label"></span>
-    </div>
-    <div class="filter-row">
-      <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
-      <button class="filter-btn" onclick="setFilter('win',this)">Wins</button>
-      <button class="filter-btn" onclick="setFilter('loss',this)">Losses</button>
-      <button class="filter-btn" onclick="setFilter('void',this)">Voids</button>
-      <button class="filter-btn" onclick="setFilter('over',this)">Overs</button>
-      <button class="filter-btn" onclick="setFilter('under',this)">Unders</button>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Pitcher</th>
-            <th>Matchup</th>
-            <th>Line</th>
-            <th>Pick</th>
-            <th>Odds</th>
-            <th>Actual K</th>
-            <th>Result</th>
-            <th>Units</th>
-            <th>Book</th>
-          </tr>
-        </thead>
-        <tbody id="all-tbody"></tbody>
-      </table>
-    </div>
-  </div>
+      <div class="card">
+        <div class="sec-label">Recent K results</div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Date</th><th>Pitcher</th><th>Matchup</th><th>Pick</th><th>Actual</th><th>Result</th><th>Units</th></tr></thead>
+          <tbody id="k-results-body"></tbody>
+        </table></div>
+      </div>
+    </section>
 
+    <!-- HR SIDE -->
+    <section class="side side-hr">
+      <div class="side-head"><span class="badge-ico">💣</span><h2>Home Runs</h2></div>
+
+      <div class="stat-row">
+        <div class="stat-card"><div class="stat-label">Record</div><div class="stat-value" id="hr-record">—</div><div class="stat-sub" id="hr-void"></div></div>
+        <div class="stat-card"><div class="stat-label">Win rate</div><div class="stat-value" id="hr-winrate">—</div><div class="stat-sub">anytime HR</div></div>
+        <div class="stat-card"><div class="stat-label">Units</div><div class="stat-value" id="hr-units">—</div><div class="stat-sub">flat 1u</div></div>
+      </div>
+
+      <div class="card">
+        <div class="side-chart-head"><span class="side-chart-big" id="hr-chart-big">—</span><span class="side-chart-sub">HR units</span></div>
+        <div class="chart-section"><canvas id="chartHR" height="120"></canvas></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Today's HR picks</span><div class="card-pills"><span class="pill pill-date" id="hr-picks-count"></span></div></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th></th><th>Batter</th><th>Matchup</th><th>Pitcher</th><th>Pick</th><th>Odds</th><th>Model P</th><th>Live</th><th>Edge</th><th>Book</th></tr></thead>
+          <tbody id="hr-picks-body"></tbody>
+        </table></div>
+        <div id="hr-picks-empty"></div>
+      </div>
+
+      <div class="card">
+        <div class="sec-label">Recent HR results</div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Date</th><th>Batter</th><th>Matchup</th><th>Pick</th><th>Actual</th><th>Result</th><th>Units</th></tr></thead>
+          <tbody id="hr-results-body"></tbody>
+        </table></div>
+      </div>
+    </section>
+
+  </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
-const TEAM_COLORS = {
-  ARI:{bg:'#A71930',fg:'#fff'}, ATL:{bg:'#CE1141',fg:'#fff'}, BAL:{bg:'#DF4601',fg:'#fff'},
-  BOS:{bg:'#BD3039',fg:'#fff'}, CHC:{bg:'#0E3386',fg:'#fff'}, CWS:{bg:'#27251F',fg:'#C4CED4'},
-  CIN:{bg:'#C6011F',fg:'#fff'}, CLE:{bg:'#00385D',fg:'#E31937'}, COL:{bg:'#33006F',fg:'#C4CED4'},
-  DET:{bg:'#0C2340',fg:'#FA4616'}, HOU:{bg:'#002D62',fg:'#EB6E1F'}, KCR:{bg:'#004687',fg:'#C09A5B'},
-  LAA:{bg:'#BA0021',fg:'#fff'}, LAD:{bg:'#005A9C',fg:'#fff'}, MIA:{bg:'#00A3E0',fg:'#fff'},
-  MIL:{bg:'#12284B',fg:'#FFC52F'}, MIN:{bg:'#002B5C',fg:'#D31145'}, NYM:{bg:'#002D72',fg:'#FF5910'},
-  NYY:{bg:'#003087',fg:'#fff'}, OAK:{bg:'#003831',fg:'#EFB21E'}, PHI:{bg:'#E81828',fg:'#fff'},
-  PIT:{bg:'#FDB827',fg:'#27251F'}, SDP:{bg:'#2F241D',fg:'#FFC425'}, SFG:{bg:'#FD5A1E',fg:'#27251F'},
-  SEA:{bg:'#0C2C56',fg:'#C4CED4'}, STL:{bg:'#C41E3A',fg:'#fff'}, TBR:{bg:'#092C5C',fg:'#8FBCE6'},
-  TEX:{bg:'#003278',fg:'#C0111F'}, TOR:{bg:'#134A8E',fg:'#fff'}, WSN:{bg:'#AB0003',fg:'#fff'},
-};
-
+// ── Team logos (mlbstatic, keyed by abbreviation; all alias styles map to the id) ──
 const TEAM_IDS = {
-  ARI:109, ATL:144, BAL:110, BOS:111, CHC:112, CWS:145, CIN:113, CLE:114,
-  COL:115, DET:116, HOU:117, KCR:118, LAA:108, LAD:119, MIA:146, MIL:158,
-  MIN:142, NYM:121, NYY:147, OAK:133, PHI:143, PIT:134, SDP:135, SFG:137,
-  SEA:136, STL:138, TBR:139, TEX:140, TOR:141, WSN:120,
+  ARI:109, AZ:109, ATL:144, BAL:110, BOS:111, CHC:112, CHW:145, CWS:145, CIN:113,
+  CLE:114, COL:115, DET:116, HOU:117, KC:118, KCR:118, LAA:108, LAD:119, MIA:146,
+  MIL:158, MIN:142, NYM:121, NYY:147, OAK:133, ATH:133, PHI:143, PIT:134, SD:135,
+  SDP:135, SEA:136, SF:137, SFG:137, STL:138, TB:139, TBR:139, TEX:140, TOR:141,
+  WSH:120, WSN:120,
 };
+// Normalize any abbreviation variant to one display style.
+const DISPLAY_ALIAS = { CWS:'CHW', KC:'KCR', SD:'SDP', SF:'SFG', TB:'TBR', WSH:'WSN', AZ:'ARI', ATH:'OAK' };
+function canon(a){ a=(a||'').toString().trim().toUpperCase(); return DISPLAY_ALIAS[a] || a; }
 
-function teamBadge(abbr, size = 26) {
-  const c = TEAM_COLORS[abbr] || { bg: '#888', fg: '#fff' };
-  const id = TEAM_IDS[abbr];
-  if (id) {
-    return `<img src="https://www.mlbstatic.com/team-logos/${id}.svg"
-      width="${size}" height="${size}"
-      style="border-radius:50%;object-fit:contain;flex-shrink:0;background:${c.bg};padding:2px;"
-      onerror="this.outerHTML='<div class=team-badge style=width:${size}px;height:${size}px;background:${c.bg};color:${c.fg};>${abbr}</div>'"
-      alt="${abbr}">`;
+function teamLogo(abbr, size=24){
+  const raw=(abbr||'').toString().trim().toUpperCase();
+  if(!raw || raw==='NAN') return '';
+  const id=TEAM_IDS[raw];
+  const disp=canon(raw);
+  if(id){
+    const inner=size-6;
+    return `<span class="logo-plate" style="width:${size}px;height:${size}px">`+
+      `<img src="https://www.mlbstatic.com/team-logos/${id}.svg" width="${inner}" height="${inner}" `+
+      `style="object-fit:contain" alt="${disp}" `+
+      `onerror="this.parentNode.outerHTML='<span class=\\'abbr-fallback\\'>${disp}</span>'"></span>`;
   }
-  return `<div class="team-badge" style="width:${size}px;height:${size}px;background:${c.bg};color:${c.fg};">${abbr}</div>`;
+  return `<span class="abbr-fallback">${disp}</span>`;
+}
+function teamChip(abbr){
+  const disp=canon(abbr);
+  if(!disp) return '<span class="muted">—</span>';
+  return `<span class="team-chip">${teamLogo(disp,22)}<span class="chip-abbr">${disp}</span></span>`;
+}
+function matchupHtml(left, right, sep){
+  const r = right ? `<span class="mvs">${sep}</span>${teamChip(right)}` : '';
+  return `<span class="matchup">${teamChip(left)}${r}</span>`;
 }
 
-function matchupHtml(away, home) {
-  return `<div class="matchup">${teamBadge(away,22)}<span class="matchup-vs">@</span>${teamBadge(home,22)}</div>`;
-}
-
-function fmtGameTime(iso) {
-  if (!iso) return "";
-  const d = new Date(iso);
-  if (isNaN(d.getTime())) return "";
-  return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York' }) + ' ET';
-}
-function gameTimeHtml(iso) {
-  const t = fmtGameTime(iso);
-  return t ? `<div class="matchup-time">${t}</div>` : "";
-}
-
-function edgeHtml(edgeStr, edgeVal) {
-  const fill = Math.min(100, Math.round(edgeVal * 500));
-  return `<div class="edge-cell"><span class="edge-val">${edgeStr}</span><div class="edge-bar-bg"><div class="edge-bar-fill" style="width:${fill}%"></div></div></div>`;
-}
-
-function fmtUnits(u) {
-  if (u === 0) return '<span class="muted">0.00u</span>';
-  const cls = u > 0 ? 'units-pos' : 'units-neg';
-  return `<span class="${cls}">${u > 0 ? '+' : ''}${u.toFixed(2)}u</span>`;
-}
-
-function fmtDate(d) {
-  if (!d) return '—';
-  const [y, m, day] = d.split('-');
-  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+// ── Formatting ──
+function fmtDate(d){
+  if(!d) return '—';
+  const [y,m,day]=d.split('-');
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   return `${months[parseInt(m,10)-1]} ${parseInt(day,10)}`;
 }
+function fmtPacific(iso){
+  if(!iso) return '';
+  const d=new Date(iso);
+  if(isNaN(d.getTime())) return '';
+  return d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Los_Angeles'})+' PT';
+}
+function timeHtml(iso){ const t=fmtPacific(iso); return t?`<div class="matchup-time">${t}</div>`:''; }
+function fmtTime(iso){ if(!iso) return '—'; const d=new Date(iso); return d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}); }
+function fmtUnits(u){ if(!u) return '<span class="muted">0.00u</span>'; const c=u>0?'units-pos':'units-neg'; return `<span class="${c}">${u>0?'+':''}${u.toFixed(2)}u</span>`; }
+function americanToProfit(odds){ const o=parseInt(String(odds).replace('+',''),10); if(isNaN(o)) return 0; return o>0?o/100:100/Math.abs(o); }
 
-// ── Live K data ────────────────────────────────────────────────────────────────
-// Maps pitcher name (lowercase) -> { k, status, inning }
-let liveKData = {};
-let liveKLoading = false;
+// field-tolerant accessors (works with new + legacy JSON)
+const pName  = p => p.name ?? p.pitcher ?? p.batter ?? '';
+const pModel = p => (p.model ?? p.proj_k ?? 0);
+const rActual= r => (r.actual ?? r.actual_k ?? null);
+const propType = x => (x.prop_type || 'K');
 
-async function fetchLiveKs(dateStr) {
-  if (liveKLoading) return;
-  liveKLoading = true;
-  const newData = Object.assign({}, liveKData); // start from last known data
-  try {
-    // Use the date from today.json picks data (avoids UTC midnight rollover issues)
-    const today = dateStr || new Date().toISOString().slice(0, 10);
-    console.log('fetchLiveKs called with dateStr:', dateStr, '=> using date:', today);
-    console.log('fetchLiveKs called with dateStr:', dateStr, '=> using date:', today);
-    console.log('Fetching live Ks for date:', today);
-    const schedResp = await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${today}&hydrate=linescore`);
-    if (!schedResp.ok) throw new Error('Schedule fetch failed: ' + schedResp.status);
-    const schedData = await schedResp.json();
-    const games = schedData.dates?.[0]?.games || [];
-    // Load ALL games - filter nothing, get Final and Live
-    const activeGames = games.filter(g => {
-      const s = g.status?.abstractGameState || '';
-      return s !== 'Preview';
-    });
-    console.log('Active games found:', activeGames.length, 'of', games.length);
-    console.log('Game states:', games.map(g => g.status?.abstractGameState + '/' + g.status?.detailedState).join(', '));
-    for (const game of activeGames) {
-      try {
-        const gameId = game.gamePk;
-        const status = game.status?.abstractGameState || '';
-        const inning = game.linescore?.currentInning || null;
-        const inningHalf = game.linescore?.inningHalf || '';
-        const bsResp = await fetch(`https://statsapi.mlb.com/api/v1/game/${gameId}/boxscore`);
-        if (!bsResp.ok) { console.warn('Boxscore failed for game', gameId, bsResp.status); continue; }
-        const bs = await bsResp.json();
-        const teams = bs.teams || {};
-        for (const side of ['home', 'away']) {
-          const pitchers = teams[side]?.pitchers || [];
-          const playerInfo = teams[side]?.players || {};
-          for (const pid of pitchers) {
-            const p = playerInfo['ID' + pid];
-            if (!p) continue;
-            const name = p.person?.fullName || '';
-            const ks = p.stats?.pitching?.strikeOuts;
-            if (name && ks !== undefined) {
-              newData[name.toLowerCase()] = {
-                k: ks,
-                status: status === 'Final' ? 'final' : 'live',
-                inning,
-                inningHalf,
-              };
-            }
+function edgeHtml(edgeVal){
+  if(edgeVal==null) return '<span class="muted">—</span>';
+  const pct=(edgeVal*100).toFixed(1);
+  const fill=Math.min(100, Math.round(Math.abs(edgeVal)*500));
+  return `<div class="edge-cell"><span class="edge-val">${edgeVal>=0?'+':''}${pct}%</span><div class="edge-bar-bg"><div class="edge-bar-fill" style="width:${fill}%"></div></div></div>`;
+}
+
+// ── Live data (boxscores: pitcher Ks + batter HRs) ──
+let liveK={}, liveHR={}, liveLoading=false;
+async function fetchLive(dateStr){
+  if(liveLoading) return; liveLoading=true;
+  const nK=Object.assign({},liveK), nHR=Object.assign({},liveHR);
+  try{
+    const today=dateStr || new Date().toISOString().slice(0,10);
+    const s=await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${today}&hydrate=linescore`);
+    if(!s.ok) throw new Error('schedule '+s.status);
+    const games=((await s.json()).dates?.[0]?.games)||[];
+    for(const g of games.filter(g=>(g.status?.abstractGameState||'')!=='Preview')){
+      try{
+        const status=g.status?.abstractGameState||'';
+        const inning=g.linescore?.currentInning||null;
+        const half=g.linescore?.inningHalf||'';
+        const bs=await (await fetch(`https://statsapi.mlb.com/api/v1/game/${g.gamePk}/boxscore`)).json();
+        for(const side of ['home','away']){
+          const players=bs.teams?.[side]?.players||{};
+          for(const key in players){
+            const pl=players[key]; const nm=(pl.person?.fullName||'').toLowerCase(); if(!nm) continue;
+            const ks=pl.stats?.pitching?.strikeOuts;
+            if(ks!==undefined && (pl.stats?.pitching?.inningsPitched!==undefined))
+              nK[nm]={k:ks, status: status==='Final'?'final':'live', inning, half};
+            const hrs=pl.stats?.batting?.homeRuns;
+            if(hrs!==undefined && (pl.stats?.batting?.atBats!==undefined || pl.stats?.batting?.plateAppearances!==undefined))
+              nHR[nm]={hr:hrs, status: status==='Final'?'final':'live', inning, half};
           }
         }
-      } catch(e) {
-        console.warn('Error fetching game', game.gamePk, e.message);
-      }
+      }catch(e){ /* skip one game */ }
     }
-    liveKData = newData;
-    console.log('Live K data loaded:', Object.keys(newData).length, 'pitchers');
-    console.log('Names from API:', Object.keys(newData).slice(0, 10));
-    document.getElementById('live-refresh-label').textContent = 'Updated ' + new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
-  } catch(e) {
-    console.error('Live K fetch failed:', e.message);
-    document.getElementById('live-refresh-label').textContent = 'Error: ' + e.message;
-  }
-  liveKLoading = false;
+    liveK=nK; liveHR=nHR;
+  }catch(e){ console.warn('live fetch failed', e.message); }
+  liveLoading=false;
 }
-function liveKHtml(pitcher, line, pick) {
-  const info = liveKData[pitcher.toLowerCase()];
-  if (!info) {
-    return '<span class="muted">—</span>';
-  }
-
-  const k = info.k;
-  let paceClass = '';
-  let statusHtml = '';
-
-  if (info.status === 'live') {
-    // Simple on-pace check: over pick wants k > line, under wants k < line
-    if (pick === 'over') {
-      paceClass = k >= line ? 'on-pace-win' : 'on-pace-loss';
-    } else {
-      paceClass = k <= line ? 'on-pace-win' : 'on-pace-loss';
-    }
-    const inningStr = info.inning ? `${info.inningHalf === 'Bottom' ? 'Bot' : 'Top'} ${info.inning}` : 'Live';
-    statusHtml = `<span class="live-status in-progress">${inningStr}</span>`;
-  } else if (info.status === 'final') {
-    paceClass = 'final';
-    statusHtml = `<span class="live-status final">Final</span>`;
-  } else {
-    return '<span class="muted">—</span>';
-  }
-
-  return `<div class="live-k-cell"><span class="live-k-num ${paceClass}">${k}</span>${statusHtml}</div>`;
+function inningStr(i){ return i?.inning ? `${i.half==='Bottom'?'Bot':'Top'} ${i.inning}` : 'Live'; }
+function liveKHtml(name,line,pick){
+  const i=liveK[(name||'').toLowerCase()]; if(!i) return '<span class="muted">—</span>';
+  let cls='final', st=`<span class="live-status final">Final</span>`;
+  if(i.status==='live'){ cls = (pick==='over' ? (i.k>=line?'win':'loss') : (i.k<=line?'win':'loss')); st=`<span class="live-status in-progress">${inningStr(i)}</span>`; }
+  return `<div class="live-cell"><span class="live-num ${cls}">${i.k}</span>${st}</div>`;
+}
+function liveHRHtml(name){
+  const i=liveHR[(name||'').toLowerCase()]; if(!i) return '<span class="muted">—</span>';
+  const homered=i.hr>=1;
+  let cls = i.status==='final' ? (homered?'win':'loss') : (homered?'win':'final');
+  const st = i.status==='final' ? `<span class="live-status final">Final</span>` : `<span class="live-status in-progress">${inningStr(i)}</span>`;
+  const label = homered ? `${i.hr} HR ✓` : `0 HR`;
+  return `<div class="live-cell"><span class="live-num ${cls}">${label}</span>${st}</div>`;
 }
 
-// ── Data ──────────────────────────────────────────────────────────────────────
-let allResults = [];
-let picksDate = null;
-let todayPicks = [];
-let metaInfo = {};
-let currentFilter = 'all';
-let chart = null;
-let chartPeriod = 'ALL';
-let chartBaseVal = 0;
-let chartAllVals = [];
+// ── Data ──
+let todayPicks=[], allResults=[], metaInfo={}, picksDate=null, period='ALL';
+const charts={};
 
-async function load() {
-  try {
-    const [t, r, m] = await Promise.all([
-      fetch('data/today.json?v=' + Date.now()).then(x => x.json()).catch(() => ({ date: '', picks: [] })),
-      fetch('data/results.json?v=' + Date.now()).then(x => x.json()).catch(() => ({ results: [] })),
-      fetch('data/meta.json?v=' + Date.now()).then(x => x.json()).catch(() => ({})),
-    ]);
-    todayPicks = t.picks || [];
-    picksDate = t.date || null;
-    allResults = (r.results || []).filter(r => r.result);
-    metaInfo = m;
-    // Fetch live Ks then render
-    await fetchLiveKs(t.date);
-    render(t.date);
-    renderTodayLive();
-    renderTodayLive();
-    // Refresh live Ks every 2 minutes and re-render picks table only
-    setInterval(async () => {
-      await fetchLiveKs(picksDate);
-      renderPicksTable();
-      renderTodayLive();
-      renderTodayLive();
-    }, 120000);
-  } catch(e) {
-    document.body.innerHTML += `<p style="text-align:center;padding:40px;color:#999;">Could not load data — run the script first.</p>`;
-  }
-}
-
-// ── Stats ─────────────────────────────────────────────────────────────────────
-function renderStats() {
-  const settled = allResults.filter(r => r.result !== 'void');
-  const wins = settled.filter(r => r.result === 'win').length;
-  const losses = settled.filter(r => r.result === 'loss').length;
-  const voids = allResults.filter(r => r.result === 'void').length;
-  const totalUnits = allResults.reduce((s, r) => s + (r.units || 0), 0);
-  const winRate = (wins + losses) > 0 ? wins / (wins + losses) : 0;
-
-  document.getElementById('stat-record').textContent = `${wins}–${losses}`;
-  document.getElementById('stat-void').textContent = voids > 0 ? `${voids} void` : '';
-  const wrEl = document.getElementById('stat-winrate');
-  wrEl.textContent = `${Math.round(winRate * 100)}%`;
-  wrEl.className = 'stat-value ' + (winRate >= 0.52 ? 'pos' : 'neg');
-  const uEl = document.getElementById('stat-units');
-  uEl.textContent = (totalUnits >= 0 ? '+' : '') + totalUnits.toFixed(2) + 'u';
-  uEl.className = 'stat-value ' + (totalUnits >= 0 ? 'pos' : 'neg');
-}
-
-function renderStreak() {
-  const settled = allResults.filter(r => r.result !== 'void');
-  const last = settled.slice(-8);
-  document.getElementById('streak-row').innerHTML = last.map(r =>
-    `<span class="s-chip s-${r.result[0]}">${r.result[0].toUpperCase()}</span>`
-  ).join('');
-}
-
-// ── Chart ─────────────────────────────────────────────────────────────────────
-function buildCumulative(results) {
-  const byDate = {};
-  for (const r of results) {
-    if (!r.date) continue;
-    byDate[r.date] = (byDate[r.date] || 0) + (r.units || 0);
-  }
-  const dates = Object.keys(byDate).sort();
-  const vals = [0];
-  const labels = ['Start'];
-  let cum = 0;
-  for (const d of dates) {
-    cum += byDate[d];
-    vals.push(parseFloat(cum.toFixed(3)));
-    labels.push(fmtDate(d));
-  }
-  return { labels, values: vals };
-}
-
-function filterByPeriod(results, period) {
-  if (period === 'ALL') return results;
-  const now = new Date();
-  const days = period === '1W' ? 7 : 30;
-  const cutoff = new Date(now - days * 864e5).toISOString().slice(0, 10);
-  return results.filter(r => r.date >= cutoff);
-}
-
-function renderChart(period) {
-  const filtered = filterByPeriod(allResults, period);
-  const { labels, values } = buildCumulative(filtered);
-  const last = values[values.length - 1] ?? 0;
-  const base = values[0] ?? 0;
-  chartBaseVal = base;
-  chartAllVals = values;
-  const pos = last >= base;
-  const color = pos ? '#639922' : '#A32D2D';
-
-  updateChartHeader(last, base, period === 'ALL' ? 'all time' : period === '1W' ? 'past week' : 'past month');
-
-  if (chart) chart.destroy();
-  const ctx = document.getElementById('unitsChart').getContext('2d');
-  chart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [{
-        data: values,
-        borderColor: color,
-        borderWidth: 2,
-        pointRadius: 0,
-        pointHoverRadius: 0,
-        fill: true,
-        backgroundColor: (ctx) => {
-          const c = ctx.chart;
-          if (!c.chartArea) return 'transparent';
-          const g = ctx.chart.ctx.createLinearGradient(0, c.chartArea.top, 0, c.chartArea.bottom);
-          g.addColorStop(0, pos ? 'rgba(99,153,34,0.15)' : 'rgba(163,45,45,0.15)');
-          g.addColorStop(1, 'rgba(0,0,0,0)');
-          return g;
-        },
-        tension: 0.4,
-      }]
-    },
-    options: {
-      responsive: true,
-      animation: { duration: 350 },
-      interaction: { mode: 'index', intersect: false },
-      plugins: { legend: { display: false }, tooltip: { enabled: false } },
-      scales: {
-        x: {
-          grid: { display: false },
-          border: { display: false },
-          ticks: { maxTicksLimit: 6, font: { size: 11, family: 'Inter' }, color: 'rgba(128,128,128,0.6)', maxRotation: 0 }
-        },
-        y: {
-          position: 'right',
-          grid: { color: 'rgba(128,128,128,0.07)', drawBorder: false },
-          border: { display: false },
-          ticks: {
-            font: { size: 11, family: 'Inter' }, color: 'rgba(128,128,128,0.6)',
-            maxTicksLimit: 4,
-            callback: v => (v >= 0 ? '+' : '') + v.toFixed(1) + 'u'
-          }
-        }
-      },
-      onHover: (event) => {
-        if (!event.native) return;
-        const ca = chart.chartArea;
-        const rect = document.getElementById('unitsChart').getBoundingClientRect();
-        const x = event.native.clientX - rect.left;
-        const crosshair = document.getElementById('crosshair');
-        const dot = document.getElementById('chart-dot');
-        if (x < ca.left || x > ca.right) {
-          crosshair.style.display = 'none'; dot.style.display = 'none';
-          updateChartHeader(last, base, period === 'ALL' ? 'all time' : period === '1W' ? 'past week' : 'past month');
-          return;
-        }
-        const pts = chart.getElementsAtEventForMode(event.native, 'index', { intersect: false }, false);
-        if (pts.length) {
-          const idx = pts[0].index;
-          const val = values[idx];
-          const meta = chart.getDatasetMeta(0);
-          const pt = meta.data[idx];
-          crosshair.style.display = 'block';
-          crosshair.style.left = pt.x + 'px';
-          crosshair.style.top = ca.top + 'px';
-          crosshair.style.height = (ca.bottom - ca.top) + 'px';
-          dot.style.display = 'block';
-          dot.style.left = pt.x + 'px';
-          dot.style.top = pt.y + 'px';
-          dot.style.background = color;
-          updateChartHeader(val, base, labels[idx]);
-        }
-      }
-    }
-  });
-
-  document.getElementById('unitsChart').addEventListener('mouseleave', () => {
-    document.getElementById('crosshair').style.display = 'none';
-    document.getElementById('chart-dot').style.display = 'none';
-    updateChartHeader(last, base, period === 'ALL' ? 'all time' : period === '1W' ? 'past week' : 'past month');
-  });
-}
-
-function updateChartHeader(val, base, label) {
-  const diff = val - base;
-  const pos = diff >= 0;
-  document.getElementById('chart-big').textContent = (val >= 0 ? '+' : '') + val.toFixed(2) + 'u';
-  document.getElementById('chart-change-val').textContent = (diff >= 0 ? '+' : '') + diff.toFixed(2) + 'u';
-  document.getElementById('chart-change-val').className = 'chart-change-val ' + (pos ? 'pos' : 'neg');
-  const pct = base !== 0 ? Math.abs(diff / base * 100).toFixed(1) + '%' : '∞%';
-  document.getElementById('chart-change-label').textContent = `(${pos ? '+' : '-'}${pct}) ${label}`;
-}
-
-function setPeriod(p, btn) {
-  chartPeriod = p;
-  document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderChart(p);
-}
-
-// ── Today's picks ─────────────────────────────────────────────────────────────
-// ── Today live stats (grades today's finals from live K data) ──────────────────
-function americanToProfit(oddsStr) {
-  // Returns profit per 1 unit staked for a winning bet
-  const o = parseInt(String(oddsStr).replace('+',''), 10);
-  if (isNaN(o)) return 0;
-  return o > 0 ? o / 100 : 100 / Math.abs(o);
-}
-
-function renderTodayLive() {
-  const banner = document.getElementById('today-live-banner');
-  let wins = 0, losses = 0, pushes = 0, units = 0, graded = 0;
-
-  for (const p of todayPicks) {
-    const info = liveKData[p.pitcher.toLowerCase()];
-    if (!info || info.status !== 'final') continue;
-    const k = info.k;
-    const line = parseFloat(p.line);
-    if (isNaN(line)) continue;
-
-    let result;
-    if (k === line) {
-      result = 'push';
-    } else if (p.pick === 'over') {
-      result = k > line ? 'win' : 'loss';
-    } else {
-      result = k < line ? 'win' : 'loss';
-    }
-
-    graded++;
-    if (result === 'win') { wins++; units += americanToProfit(p.odds); }
-    else if (result === 'loss') { losses++; units -= 1; }
-    else { pushes++; }
-  }
-
-  if (graded === 0) {
-    banner.style.display = 'none';
-    return;
-  }
-
-  banner.style.display = '';
-  document.getElementById('today-record').textContent =
-    `${wins}\u2013${losses}` + (pushes > 0 ? ` (${pushes}P)` : '');
-  const wr = (wins + losses) > 0 ? Math.round(wins / (wins + losses) * 100) : 0;
-  const wrEl = document.getElementById('today-winrate');
-  wrEl.textContent = `${wr}%`;
-  wrEl.style.color = wr >= 52 ? 'var(--green)' : 'var(--red)';
-  const uEl = document.getElementById('today-units');
-  uEl.textContent = (units >= 0 ? '+' : '') + units.toFixed(2) + 'u';
-  uEl.style.color = units >= 0 ? 'var(--green)' : 'var(--red)';
-}
-
-// ── Today live stats (grades today's finals from live K data) ──────────────────
-function americanToProfit(oddsStr) {
-  // Returns profit per 1 unit staked for a winning bet
-  const o = parseInt(String(oddsStr).replace('+',''), 10);
-  if (isNaN(o)) return 0;
-  return o > 0 ? o / 100 : 100 / Math.abs(o);
-}
-
-function renderTodayLive() {
-  const banner = document.getElementById('today-live-banner');
-  let wins = 0, losses = 0, pushes = 0, units = 0, graded = 0;
-
-  for (const p of todayPicks) {
-    const info = liveKData[p.pitcher.toLowerCase()];
-    if (!info || info.status !== 'final') continue;
-    const k = info.k;
-    const line = parseFloat(p.line);
-    if (isNaN(line)) continue;
-
-    let result;
-    if (k === line) {
-      result = 'push';
-    } else if (p.pick === 'over') {
-      result = k > line ? 'win' : 'loss';
-    } else {
-      result = k < line ? 'win' : 'loss';
-    }
-
-    graded++;
-    if (result === 'win') { wins++; units += americanToProfit(p.odds); }
-    else if (result === 'loss') { losses++; units -= 1; }
-    else { pushes++; }
-  }
-
-  if (graded === 0) {
-    banner.style.display = 'none';
-    return;
-  }
-
-  banner.style.display = '';
-  document.getElementById('today-record').textContent =
-    `${wins}\u2013${losses}` + (pushes > 0 ? ` (${pushes}P)` : '');
-  const wr = (wins + losses) > 0 ? Math.round(wins / (wins + losses) * 100) : 0;
-  const wrEl = document.getElementById('today-winrate');
-  wrEl.textContent = `${wr}%`;
-  wrEl.style.color = wr >= 52 ? 'var(--green)' : 'var(--red)';
-  const uEl = document.getElementById('today-units');
-  uEl.textContent = (units >= 0 ? '+' : '') + units.toFixed(2) + 'u';
-  uEl.style.color = units >= 0 ? 'var(--green)' : 'var(--red)';
-}
-
-function renderPicksTable() {
-  document.getElementById('picks-tbody').innerHTML = todayPicks.map((p, i) => {
-    const accentColor = i === 0 ? '#97C459' : 'var(--border)';
-    const awayAbbr = p.opp || '?';
-    const homeAbbr = p.team || '?';
-    return `<tr class="${i === 0 ? 'top-pick' : ''}">
-      <td style="padding:0 0 0 8px;"><div class="accent-left" style="background:${accentColor};"></div></td>
-      <td><div class="pitcher-cell">${teamBadge(p.team)}<span class="pitcher-name">${p.pitcher}</span></div></td>
-      <td>${matchupHtml(awayAbbr, homeAbbr)}${gameTimeHtml(p.time)}</td>
-      <td>${p.line}</td>
-      <td><span class="badge b-${p.pick}">${p.pick}</span></td>
-      <td class="muted">${p.odds}</td>
-      <td>${p.proj_k}</td>
-      <td>${liveKHtml(p.pitcher, p.line, p.pick)}</td>
-      <td>${edgeHtml(p.edge, p.edge_val)}</td>
-      <td><span class="book-tag">${p.book || '—'}</span></td>
-    </tr>`;
-  }).join('');
-}
-
-function renderPicks(dateStr) {
-  const picksCard = document.getElementById('picks-card');
-  const emptyCard = document.getElementById('empty-card');
-  document.getElementById('picks-date').textContent = dateStr ? fmtDate(dateStr) : '—';
-  document.getElementById('empty-date').textContent = dateStr ? fmtDate(dateStr) : '—';
-
-  if (todayPicks.length === 0) {
-    picksCard.style.display = 'none';
-    emptyCard.style.display = '';
-    const n = metaInfo.props_checked || 0;
-    document.getElementById('empty-sub').textContent =
-      `Model ran at ${fmtTime(metaInfo.last_run)} — ${n} props checked, none cleared the threshold.`;
-    return;
-  }
-
-  picksCard.style.display = '';
-  emptyCard.style.display = 'none';
-  document.getElementById('picks-count').textContent = `${todayPicks.length} play${todayPicks.length !== 1 ? 's' : ''}`;
-  renderPicksTable();
-}
-
-// ── Recent results ────────────────────────────────────────────────────────────
-function pitcherCell(r) {
-  return `<div class="pitcher-cell">${teamBadge(r.team || '')}<span class="pitcher-name">${r.pitcher}</span></div>`;
-}
-
-function resultMatchup(r) {
-  if (r.team && r.opp) return matchupHtml(r.team, r.opp);
-  if (r.team) return `<div class="matchup">${teamBadge(r.team, 22)}</div>`;
-  return '<span class="muted">—</span>';
-}
-
-function renderRecent() {
-  const settled = allResults.filter(r => r.result !== 'void').slice(-10).reverse();
-  if (settled.length === 0) {
-    document.getElementById('recent-tbody').innerHTML = `<tr><td colspan="8" class="no-data">No results yet.</td></tr>`;
-    return;
-  }
-  document.getElementById('recent-tbody').innerHTML = settled.map(r => `
-    <tr>
-      <td class="muted">${fmtDate(r.date)}</td>
-      <td>${pitcherCell(r)}</td>
-      <td>${resultMatchup(r)}</td>
-      <td>${r.line}</td>
-      <td><span class="badge b-${r.pick}">${r.pick}</span></td>
-      <td>${r.actual_k != null ? r.actual_k : '—'}</td>
-      <td><span class="badge b-${r.result}">${r.result}</span></td>
-      <td>${fmtUnits(r.units)}</td>
-      <td>${r.book ? `<span class="book-tag">${r.book}</span>` : '<span class="muted">—</span>'}</td>
-    </tr>`).join('');
-}
-
-// ── All picks ─────────────────────────────────────────────────────────────────
-function setFilter(f, btn) {
-  currentFilter = f;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+async function load(){
+  const [t,r,m]=await Promise.all([
+    fetch('data/today.json?v='+Date.now()).then(x=>x.json()).catch(()=>({date:'',picks:[]})),
+    fetch('data/results.json?v='+Date.now()).then(x=>x.json()).catch(()=>({results:[]})),
+    fetch('data/meta.json?v='+Date.now()).then(x=>x.json()).catch(()=>({})),
+  ]);
+  todayPicks=t.picks||[]; picksDate=t.date||null;
+  allResults=(r.results||[]).filter(x=>x.result);
+  metaInfo=m;
+  await fetchLive(picksDate);
   renderAll();
+  setInterval(async()=>{ await fetchLive(picksDate); renderPicks(); }, 120000);
 }
 
-function renderAll() {
-  const data = allResults.filter(r => {
-    if (currentFilter === 'all') return true;
-    if (currentFilter === 'win' || currentFilter === 'loss' || currentFilter === 'void') return r.result === currentFilter;
-    return r.pick === currentFilter;
-  }).slice().reverse();
+// ── Cumulative series (client-side, period-aware) ──
+function periodCutoff(p){ if(p==='ALL') return null; const days=p==='1W'?7:30; return new Date(Date.now()-days*864e5).toISOString().slice(0,10); }
+function cumulative(results, p){
+  const cut=periodCutoff(p);
+  const rows=results.filter(x=>x.date && (!cut || x.date>=cut));
+  const byDate={};
+  for(const x of rows) byDate[x.date]=(byDate[x.date]||0)+(x.units||0);
+  const dates=Object.keys(byDate).sort();
+  const labels=['Start'], vals=[0]; let cum=0;
+  for(const d of dates){ cum+=byDate[d]; labels.push(fmtDate(d)); vals.push(+cum.toFixed(3)); }
+  return {labels, vals};
+}
 
-  document.getElementById('all-count-label').textContent = `${data.length} pick${data.length !== 1 ? 's' : ''}`;
+const zeroLine={ id:'zeroLine', afterDraw(c){ const a=c.chartArea, y=c.scales.y.getPixelForValue(0);
+  if(y>=a.top && y<=a.bottom){ const x=c.ctx; x.save(); x.strokeStyle='rgba(128,128,128,0.4)'; x.setLineDash([4,4]); x.lineWidth=1; x.beginPath(); x.moveTo(a.left,y); x.lineTo(a.right,y); x.stroke(); x.restore(); } } };
 
-  if (data.length === 0) {
-    document.getElementById('all-tbody').innerHTML = `<tr><td colspan="9" class="no-data">No picks match this filter.</td></tr>`;
-    return;
+function colors(){ const css=getComputedStyle(document.documentElement); return {
+  green: css.getPropertyValue('--green').trim()||'#2f7d33',
+  red: css.getPropertyValue('--red').trim()||'#c0392b',
+  k: css.getPropertyValue('--k-accent').trim()||'#2f7d33',
+  hr: css.getPropertyValue('--hr-accent').trim()||'#d9622b',
+}; }
+
+function makeChart(id, results, mode){
+  const {labels, vals}=cumulative(results, period);
+  const c=colors();
+  const last=vals[vals.length-1]??0;
+  let line = mode==='K'?c.k : mode==='HR'?c.hr : (last>=0?c.green:c.red);
+  const ctx=document.getElementById(id).getContext('2d');
+  if(charts[id]) charts[id].destroy();
+  const ds={
+    data: vals, borderWidth: 2, pointRadius: 0, pointHoverRadius: 4, tension: 0.3, fill: true,
+    borderColor: line,
+    backgroundColor: (cx)=>{ const ch=cx.chart; if(!ch.chartArea) return 'transparent';
+      const g=ch.ctx.createLinearGradient(0,ch.chartArea.top,0,ch.chartArea.bottom);
+      const base = mode==='K'?c.k : mode==='HR'?c.hr : (last>=0?c.green:c.red);
+      g.addColorStop(0, hexA(base,0.18)); g.addColorStop(1, hexA(base,0)); return g; },
+  };
+  if(mode==='combined'){
+    ds.segment={ borderColor: s => (s.p1.parsed.y>=0 ? c.green : c.red) };
   }
-  document.getElementById('all-tbody').innerHTML = data.map(r => `
-    <tr>
-      <td class="muted">${fmtDate(r.date)}</td>
-      <td>${pitcherCell(r)}</td>
-      <td>${resultMatchup(r)}</td>
-      <td>${r.line}</td>
-      <td><span class="badge b-${r.pick}">${r.pick}</span></td>
-      <td class="muted">${r.odds}</td>
-      <td class="muted">${r.actual_k != null ? r.actual_k : '—'}</td>
-      <td><span class="badge b-${r.result}">${r.result}</span></td>
-      <td>${fmtUnits(r.units)}</td>
-      <td>${r.book ? `<span class="book-tag">${r.book}</span>` : '<span class="muted">—</span>'}</td>
-    </tr>`).join('');
+  charts[id]=new Chart(ctx,{ type:'line', data:{labels, datasets:[ds]}, plugins:[zeroLine], options:{
+    responsive:true, animation:{duration:300}, interaction:{mode:'index',intersect:false},
+    plugins:{ legend:{display:false}, tooltip:{ enabled:true, displayColors:false,
+      callbacks:{ label:(i)=> ((i.parsed.y>=0?'+':'')+i.parsed.y.toFixed(2)+'u') } } },
+    scales:{
+      x:{ grid:{display:false}, border:{display:false}, ticks:{ maxTicksLimit:6, font:{size:10,family:'Inter'}, color:'rgba(128,128,128,0.7)', maxRotation:0 } },
+      y:{ position:'right', grid:{ color:'rgba(128,128,128,0.08)' }, border:{display:false},
+          ticks:{ maxTicksLimit:5, font:{size:10,family:'Inter'}, color:'rgba(128,128,128,0.7)', callback:v=>(v>=0?'+':'')+v.toFixed(0)+'u' } }
+    }
+  }});
+}
+function hexA(hex,a){ // accept #rgb/#rrggbb -> rgba
+  hex=hex.replace('#',''); if(hex.length===3) hex=hex.split('').map(c=>c+c).join('');
+  const n=parseInt(hex,16); return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`;
 }
 
-// ── Meta ──────────────────────────────────────────────────────────────────────
-function renderMeta() {
-  if (metaInfo.last_run) {
-    document.getElementById('last-run-time').textContent = fmtTime(metaInfo.last_run);
+// ── Stats ──
+function statsFor(pt){
+  const rs=allResults.filter(r=>propType(r)===pt);
+  const wins=rs.filter(r=>r.result==='win').length;
+  const losses=rs.filter(r=>r.result==='loss').length;
+  const pushes=rs.filter(r=>r.result==='push').length;
+  const voids=rs.filter(r=>r.result==='void').length;
+  const units=rs.reduce((s,r)=>s+(r.units||0),0);
+  const wr=(wins+losses)>0?wins/(wins+losses):0;
+  return {rs,wins,losses,pushes,voids,units,wr};
+}
+function renderSideStats(pt, ids){
+  const s=statsFor(pt);
+  document.getElementById(ids.rec).textContent=`${s.wins}–${s.losses}`+(s.pushes?`–${s.pushes}`:'');
+  document.getElementById(ids.void).textContent=s.voids?`${s.voids} void`:'';
+  const wr=document.getElementById(ids.wr); wr.textContent=`${Math.round(s.wr*100)}%`; wr.className='stat-value '+(s.wr>=0.52?'pos':'neg');
+  const u=document.getElementById(ids.units); u.textContent=(s.units>=0?'+':'')+s.units.toFixed(2)+'u'; u.className='stat-value '+(s.units>=0?'pos':'neg');
+  const big=document.getElementById(ids.big); const last=cumulative(s.rs,period).vals.slice(-1)[0]??0;
+  big.textContent=(last>=0?'+':'')+last.toFixed(2)+'u'; big.className='side-chart-big '+(last>=0?'pos':'neg');
+}
+
+function renderCombined(){
+  const units=allResults.reduce((s,r)=>s+(r.units||0),0);
+  const s=statsFor('K'), h=statsFor('HR');
+  const el=document.getElementById('combined-total');
+  el.textContent=(units>=0?'+':'')+units.toFixed(2)+'u'; el.className='combined-big '+(units>=0?'pos':'neg');
+  const w=s.wins+h.wins, l=s.losses+h.losses;
+  document.getElementById('combined-meta').innerHTML=
+    `<span><b>${w}–${l}</b> overall</span>`+
+    `<span>K: <b class="${s.units>=0?'pos':'neg'}">${s.units>=0?'+':''}${s.units.toFixed(2)}u</b></span>`+
+    `<span>HR: <b class="${h.units>=0?'pos':'neg'}">${h.units>=0?'+':''}${h.units.toFixed(2)}u</b></span>`;
+  document.getElementById('combined-date').textContent=picksDate?fmtDate(picksDate):'';
+  makeChart('chartCombined', allResults, 'combined');
+}
+
+// ── Today's picks ──
+function kPickRow(p,i){
+  const top=i===0?'top-pick':'';
+  return `<tr class="${top}">
+    <td style="width:3px;padding:0"></td>
+    <td><div class="player-cell">${teamLogo(p.team,24)}<span class="player-name">${pName(p)}</span></div></td>
+    <td>${matchupHtml(p.team, p.opp, 'vs')}${timeHtml(p.time)}</td>
+    <td>${p.line}</td>
+    <td><span class="badge b-${p.pick}">${p.pick}</span></td>
+    <td class="muted">${p.odds}</td>
+    <td>${(+pModel(p)).toFixed(1)}</td>
+    <td>${liveKHtml(pName(p), parseFloat(p.line), p.pick)}</td>
+    <td>${edgeHtml(p.edge_val)}</td>
+    <td><span class="book-tag">${p.book||'—'}</span></td>
+  </tr>`;
+}
+function hrPickRow(p,i){
+  const top=i===0?'top-pick':'';
+  const away=p.away||p.opp, home=p.home||p.team;
+  return `<tr class="${top}">
+    <td style="width:3px;padding:0"></td>
+    <td><div class="player-cell">${teamLogo(p.team,24)}<span class="player-name">${pName(p)}</span></div></td>
+    <td>${matchupHtml(away, home, '@')}${timeHtml(p.time)}</td>
+    <td class="muted">${p.opp_pitcher||'—'}</td>
+    <td><span class="badge b-yes">Yes</span></td>
+    <td class="muted">${p.odds}</td>
+    <td>${(pModel(p)*100).toFixed(1)}%</td>
+    <td>${liveHRHtml(pName(p))}</td>
+    <td>${edgeHtml(p.edge_val)}</td>
+    <td><span class="book-tag">${p.book||'—'}</span></td>
+  </tr>`;
+}
+function renderPicks(){
+  const kPicks=todayPicks.filter(p=>propType(p)==='K');
+  const hrPicks=todayPicks.filter(p=>propType(p)==='HR');
+  document.getElementById('k-picks-count').textContent=`${kPicks.length} play${kPicks.length!==1?'s':''}`;
+  document.getElementById('hr-picks-count').textContent=`${hrPicks.length} play${hrPicks.length!==1?'s':''}`;
+  document.getElementById('k-picks-body').innerHTML=kPicks.map(kPickRow).join('');
+  document.getElementById('hr-picks-body').innerHTML=hrPicks.map(hrPickRow).join('');
+  emptyState('k-picks-empty','k-picks-body', kPicks.length, 'No K edges cleared the threshold today.');
+  emptyState('hr-picks-empty','hr-picks-body', hrPicks.length, metaInfo.hr_props_checked? 'No HR edges cleared the threshold today.' : 'No HR lines posted yet.');
+}
+function emptyState(emptyId, bodyId, n, msg){
+  const e=document.getElementById(emptyId), b=document.getElementById(bodyId);
+  if(n===0){ b.closest('table').style.display='none'; e.innerHTML=`<div class="empty"><div class="ico">📭</div><div class="t">No picks</div><div class="s">${msg}</div></div>`; }
+  else { b.closest('table').style.display=''; e.innerHTML=''; }
+}
+
+// ── Results ──
+function resultRow(r){
+  const pt=propType(r);
+  const act=rActual(r);
+  const actLabel = act==null ? '—' : (pt==='HR' ? `${act} HR` : `${act} K`);
+  const pickBadge = pt==='HR' ? '<span class="badge b-yes">Yes</span>' : `<span class="badge b-${r.pick}">${r.pick}</span>`;
+  return `<tr>
+    <td class="muted">${fmtDate(r.date)}</td>
+    <td><div class="player-cell">${teamLogo(r.team,22)}<span class="player-name">${pName(r)}</span></div></td>
+    <td>${matchupHtml(r.team, r.opp, 'vs')}</td>
+    <td>${pickBadge}</td>
+    <td>${actLabel}</td>
+    <td><span class="badge b-${r.result}">${r.result}</span></td>
+    <td>${fmtUnits(r.units)}</td>
+  </tr>`;
+}
+function renderResults(){
+  for(const [pt,id] of [['K','k-results-body'],['HR','hr-results-body']]){
+    const rs=allResults.filter(r=>propType(r)===pt && r.result!=='void').slice(-12).reverse();
+    const body=document.getElementById(id);
+    body.innerHTML = rs.length ? rs.map(resultRow).join('') : `<tr><td colspan="7" class="empty s" style="text-align:center;padding:20px">No graded ${pt} picks yet.</td></tr>`;
   }
-  if (metaInfo.props_checked) {
-    document.getElementById('props-checked').textContent = `${metaInfo.props_checked} props checked`;
-  }
 }
 
-function fmtTime(iso) {
-  if (!iso) return '—';
-  const d = new Date(iso);
-  return d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+function renderMeta(){
+  document.getElementById('last-run-time').textContent=metaInfo.last_run?fmtTime(metaInfo.last_run):'—';
+  const k=metaInfo.props_checked||0, h=metaInfo.hr_props_checked||0;
+  document.getElementById('props-checked').textContent=`${k} K · ${h} HR props checked`;
 }
 
-// ── Main ──────────────────────────────────────────────────────────────────────
-function render(dateStr) {
+function renderCharts(){ renderCombined(); makeChart('chartK', statsFor('K').rs, 'K'); makeChart('chartHR', statsFor('HR').rs, 'HR'); }
+function renderAll(){
   renderMeta();
-  renderStats();
-  renderStreak();
-  renderChart('ALL');
-  renderPicks(dateStr);
-  renderRecent();
-  renderAll();
+  renderSideStats('K', {rec:'k-record',void:'k-void',wr:'k-winrate',units:'k-units',big:'k-chart-big'});
+  renderSideStats('HR', {rec:'hr-record',void:'hr-void',wr:'hr-winrate',units:'hr-units',big:'hr-chart-big'});
+  renderCharts();
+  renderPicks();
+  renderResults();
+}
+function setPeriod(p, btn){
+  period=p;
+  document.querySelectorAll('.period-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderSideStats('K', {rec:'k-record',void:'k-void',wr:'k-winrate',units:'k-units',big:'k-chart-big'});
+  renderSideStats('HR', {rec:'hr-record',void:'hr-void',wr:'hr-winrate',units:'hr-units',big:'hr-chart-big'});
+  renderCharts();
 }
 
 load();
