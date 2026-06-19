@@ -195,6 +195,22 @@
       "edge_val": 0.0575,
       "book": "FanDuel",
       "time": "2026-06-20T00:15:00Z"
+    },
+    {
+      "prop_type": "HR",
+      "name": "Jacob Young",
+      "opp_pitcher": "Griffin Jax",
+      "team": "WSN",
+      "opp": "TBR",
+      "home": "TBR",
+      "away": "WSN",
+      "line": 0.5,
+      "pick": "yes",
+      "odds": "+1329",
+      "model": 0.1206,
+      "edge_val": 0.0513,
+      "book": "Kalshi",
+      "time": "2026-06-19T23:10:00Z"
     }
   ]
 }
