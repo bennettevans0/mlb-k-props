@@ -25,15 +25,16 @@ from model.hr_edge import find_hr_edges
 HIDDEN_COLS = ["_edge_val", "_raw_odds", "_model_p", "_park", "_pitcher_factor", "_time", "_home", "_away"]
 
 
-def run_hr_model(api_key: str, date_str: str, season: int, min_edge: float | None = None):
+def run_hr_model(api_key: str, date_str: str, season: int, min_edge: float | None = None, use_cache: bool = True):
     """
     Run the HR model for a date.
     Returns (edges_df, n_props). edges_df may be empty (no lines / no edges).
+    Pass use_cache=False (intraday scan) to always re-fetch live HR odds.
     """
     if min_edge is None:
         min_edge = config.HR_EDGE_THRESHOLD
 
-    props = get_todays_hr_props(api_key, date_str=date_str)
+    props = get_todays_hr_props(api_key, date_str=date_str, use_cache=use_cache)
     n_props = len(props)
     if not props:
         print("[hr] No anytime-HR props available (books may not have posted them yet).")

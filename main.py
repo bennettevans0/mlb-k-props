@@ -180,6 +180,74 @@ BREF_TO_ABBREV = {
 }
 
 
+def _hr_pick_dicts(hr_edges_df: pd.DataFrame | None) -> list[dict]:
+    """Build today.json HR pick dicts from an HR edges DataFrame."""
+    out = []
+    if hr_edges_df is None or hr_edges_df.empty:
+        return out
+    for _, row in hr_edges_df[hr_edges_df["_edge_val"] > 0].iterrows():
+        out.append({
+            "prop_type": "HR",
+            "name": row["Batter"],
+            "opp_pitcher": row.get("Pitcher", ""),
+            "team": row.get("Team", ""),
+            "opp": row.get("Opp", ""),
+            "home": row.get("_home", ""),
+            "away": row.get("_away", ""),
+            "line": float(row["Line"]),
+            "pick": "yes",
+            "odds": row["Odds"],
+            "model": float(row["_model_p"]),          # P(>=1 HR), 0-1
+            "edge_val": round(float(row["_edge_val"]), 4),
+            "book": row.get("Book", ""),
+            "time": row.get("_time", ""),
+        })
+    return out
+
+
+def scan_update_site_hr(hr_edges_df: pd.DataFrame | None, date_str: str, hr_n_props: int) -> None:
+    """
+    Intraday HR scan: refresh ONLY the HR picks in today.json, preserving the
+    morning run's K picks. Does not touch results.json (grading is the morning
+    job's responsibility).
+    """
+    DOCS_DIR.mkdir(parents=True, exist_ok=True)
+    today_path = DOCS_DIR / "today.json"
+
+    existing = {"date": date_str, "picks": []}
+    if today_path.exists():
+        try:
+            with open(today_path, encoding="utf-8") as f:
+                existing = json.load(f)
+        except (ValueError, OSError):
+            pass
+
+    # Keep K picks only if today.json is actually for today (else drop stale picks)
+    if existing.get("date") == date_str:
+        k_picks = [p for p in existing.get("picks", []) if (p.get("prop_type") or "K") != "HR"]
+    else:
+        k_picks = []
+
+    picks = k_picks + _hr_pick_dicts(hr_edges_df)
+    with open(today_path, "w", encoding="utf-8") as f:
+        json.dump({"date": date_str, "picks": picks}, f, indent=2)
+
+    meta_path = DOCS_DIR / "meta.json"
+    meta = {}
+    if meta_path.exists():
+        try:
+            with open(meta_path, encoding="utf-8") as f:
+                meta = json.load(f)
+        except (ValueError, OSError):
+            pass
+    meta["hr_props_checked"] = hr_n_props
+    meta["hr_last_scan"] = datetime.now().isoformat(timespec="seconds")
+    with open(meta_path, "w", encoding="utf-8") as f:
+        json.dump(meta, f)
+
+    print(f"[hr-scan] Updated site: {len(k_picks)} K + {len(picks) - len(k_picks)} HR picks in today.json")
+
+
 def _cumulative_series(results: list[dict]) -> list[dict]:
     """Cumulative units over time: [{date, cum}] from a list of result dicts."""
     by_date: dict[str, float] = {}
@@ -250,24 +318,7 @@ def export_site_data(
                 "book": row.get("Book", ""),
                 "time": (starter_times or {}).get(_normalize(row["Pitcher"]), ""),
             })
-    if hr_edges_df is not None and not hr_edges_df.empty:
-        for _, row in hr_edges_df[hr_edges_df["_edge_val"] > 0].iterrows():
-            picks.append({
-                "prop_type": "HR",
-                "name": row["Batter"],
-                "opp_pitcher": row.get("Pitcher", ""),
-                "team": row.get("Team", ""),
-                "opp": row.get("Opp", ""),
-                "home": row.get("_home", ""),
-                "away": row.get("_away", ""),
-                "line": float(row["Line"]),
-                "pick": "yes",
-                "odds": row["Odds"],
-                "model": float(row["_model_p"]),          # P(>=1 HR), 0-1
-                "edge_val": round(float(row["_edge_val"]), 4),
-                "book": row.get("Book", ""),
-                "time": row.get("_time", ""),
-            })
+    picks.extend(_hr_pick_dicts(hr_edges_df))
     with open(DOCS_DIR / "today.json", "w") as f:
         json.dump({"date": date_str, "picks": picks}, f, indent=2)
 

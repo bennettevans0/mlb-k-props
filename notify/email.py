@@ -377,3 +377,39 @@ def send_picks(
         server.sendmail(smtp_user, recipient, msg.as_string())
 
     print(f"[email] Sent to {recipient}")
+
+
+def send_hr_alert(
+    hr_df: pd.DataFrame,
+    date_str: str,
+    recipient: str,
+    smtp_user: str,
+    smtp_password: str,
+) -> None:
+    """Send an HR-only alert for newly-found anytime-HR picks (intraday scan)."""
+    n = len(hr_df)
+    subject = f"🔔 New anytime-HR pick{'s' if n != 1 else ''} — {date_str} ({n})"
+    html = f"""
+    <html><body style="font-family:sans-serif;max-width:900px;margin:0 auto;padding:16px">
+      <h2 style="color:#a3402d;margin-bottom:4px">💣 New anytime-HR pick{'s' if n != 1 else ''} — {date_str}</h2>
+      <p style="color:#666;margin-top:0">The intraday scan found {n} new HR edge{'s' if n != 1 else ''} the model likes.</p>
+      {_hr_table(hr_df, n)}
+      <div style="background:#fdf2f0;border-radius:8px;padding:12px 16px;margin-top:16px">
+        <span style="font-weight:bold;color:#a3402d;font-size:13px">💣 HR — Season</span><br>
+        <span style="font-size:13px">{_load_total_record('HR')}</span>
+      </div>
+      <p style="color:#888;font-size:12px;margin-top:16px">Anytime HR is high-variance — small, noisy edges. Flat 1u.</p>
+    </body></html>"""
+
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = subject
+    msg["From"] = smtp_user
+    msg["To"] = recipient
+    msg.attach(MIMEText(html, "html"))
+
+    with smtplib.SMTP("smtp.gmail.com", 587) as server:
+        server.starttls()
+        server.login(smtp_user, smtp_password)
+        server.sendmail(smtp_user, recipient, msg.as_string())
+
+    print(f"[email] HR alert sent to {recipient}")

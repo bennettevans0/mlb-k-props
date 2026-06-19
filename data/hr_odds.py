@@ -36,13 +36,15 @@ def _raw_cache_path(date_str: str) -> Path:
     return CACHE_DIR / f"raw_hr_odds_{date_str}.json"
 
 
-def get_todays_hr_props(api_key: str, date_str: str | None = None) -> list[dict]:
+def get_todays_hr_props(api_key: str, date_str: str | None = None, use_cache: bool = True) -> list[dict]:
     if date_str is None:
         date_str = date.today().isoformat()
 
     raw_cache = _raw_cache_path(date_str)
 
-    if raw_cache.exists():
+    # The intraday scan must always re-fetch (lines post through the day), so it
+    # passes use_cache=False. The once-a-day full run may use the cache.
+    if use_cache and raw_cache.exists():
         print(f"[hr-odds] Loading raw HR odds from cache: {raw_cache.name}")
         with open(raw_cache) as f:
             raw_events = json.load(f)

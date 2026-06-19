@@ -4,3 +4,5 @@ __pycache__/
 *.pyc
 .env
 run_daily.ps1
+run_hr_scan.ps1
+logs/hr_scan.log
