@@ -26,8 +26,8 @@ KALSHI_MAX_SPREAD_CENTS = 5        # max yes bid/ask spread, in cents
 KALSHI_TIEBREAK_PREFER_ODDSAPI = True
 # Fees: add Kalshi's per-contract fee to its cost BEFORE comparing (apples-to-
 # apples). Historical sports fee ~= 0.07 * p * (1 - p); set ENABLED=False to zero
-# it out if the current schedule is free. Conservative default: apply the fee.
-KALSHI_FEE_ENABLED = True
+# it out if the current schedule is free. Owner confirmed current trading is free.
+KALSHI_FEE_ENABLED = False
 KALSHI_FEE_COEF = 0.07
 
 TEAM_NAME_TO_ABBREV = {
