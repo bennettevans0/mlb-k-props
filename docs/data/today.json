@@ -1,4 +1,135 @@
 {
   "date": "2026-06-25",
-  "picks": []
+  "picks": [
+    {
+      "prop_type": "K",
+      "name": "Bryce Miller",
+      "team": "SEA",
+      "opp": "PIT",
+      "line": 5.5,
+      "pick": "over",
+      "odds": "-106",
+      "model": 7.7,
+      "edge_val": 0.2774,
+      "book": "FanDuel",
+      "time": "2026-06-25T16:35:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "Troy Melton",
+      "team": "DET",
+      "opp": "HOU",
+      "line": 4.5,
+      "pick": "under",
+      "odds": "-139",
+      "model": 3.5,
+      "edge_val": 0.1392,
+      "book": "DraftKings",
+      "time": "2026-06-25T22:40:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "Tatsuya Imai",
+      "team": "HOU",
+      "opp": "DET",
+      "line": 5.5,
+      "pick": "under",
+      "odds": "-117",
+      "model": 4.6,
+      "edge_val": 0.1248,
+      "book": "Kalshi",
+      "time": "2026-06-25T22:40:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "Cade Cavalli",
+      "team": "WSN",
+      "opp": "PHI",
+      "line": 4.5,
+      "pick": "over",
+      "odds": "-133",
+      "model": 5.6,
+      "edge_val": 0.1171,
+      "book": "Kalshi",
+      "time": "2026-06-25T22:45:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "MacKenzie Gore",
+      "team": "TEX",
+      "opp": "TOR",
+      "line": 5.5,
+      "pick": "under",
+      "odds": "+122",
+      "model": 4.8,
+      "edge_val": 0.1093,
+      "book": "DraftKings",
+      "time": "2026-06-25T23:07:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "Michael McGreevy",
+      "team": "STL",
+      "opp": "ARI",
+      "line": 2.5,
+      "pick": "over",
+      "odds": "-159",
+      "model": 3.5,
+      "edge_val": 0.1051,
+      "book": "DraftKings",
+      "time": "2026-06-25T23:45:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "Zac Gallen",
+      "team": "ARI",
+      "opp": "STL",
+      "line": 3.5,
+      "pick": "under",
+      "odds": "+100",
+      "model": 3.1,
+      "edge_val": 0.0961,
+      "book": "FanDuel",
+      "time": "2026-06-25T23:45:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "Bubba Chandler",
+      "team": "PIT",
+      "opp": "SEA",
+      "line": 4.5,
+      "pick": "over",
+      "odds": "-127",
+      "model": 5.3,
+      "edge_val": 0.0869,
+      "book": "Kalshi",
+      "time": "2026-06-25T16:35:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "Landen Roupp",
+      "team": "SFG",
+      "opp": "OAK",
+      "line": 5.5,
+      "pick": "over",
+      "odds": "+122",
+      "model": 6.0,
+      "edge_val": 0.0634,
+      "book": "DraftKings",
+      "time": "2026-06-25T19:45:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "Jeffrey Springs",
+      "team": "OAK",
+      "opp": "SFG",
+      "line": 4.5,
+      "pick": "under",
+      "odds": "+102",
+      "model": 4.2,
+      "edge_val": 0.0565,
+      "book": "DraftKings",
+      "time": "2026-06-25T19:45:00Z"
+    }
+  ]
 }
