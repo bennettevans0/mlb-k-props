@@ -2,6 +2,32 @@
   "date": "2026-06-30",
   "picks": [
     {
+      "prop_type": "K",
+      "name": "Justin Wrobleski",
+      "team": "LAD",
+      "opp": "OAK",
+      "line": 5.5,
+      "pick": "under",
+      "odds": "+115",
+      "model": 4.5,
+      "edge_val": 0.2348,
+      "book": "DraftKings",
+      "time": "2026-07-01T01:40:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "Landen Roupp",
+      "team": "SFG",
+      "opp": "ARI",
+      "line": 4.5,
+      "pick": "over",
+      "odds": "-170",
+      "model": 5.5,
+      "edge_val": 0.0567,
+      "book": "Kalshi",
+      "time": "2026-07-01T01:40:00Z"
+    },
+    {
       "prop_type": "HR",
       "name": "Liam Hicks",
       "opp_pitcher": "Tanner Gordon",
