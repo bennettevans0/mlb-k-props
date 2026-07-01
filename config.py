@@ -4,6 +4,11 @@ ODDS_API_BASE = "https://api.the-odds-api.com/v4"
 EDGE_THRESHOLD = 0.05
 MIN_IP_FILTER = 25
 
+# Dampen opponent K-rate adjustment toward neutral (1.0).
+# Backtest across 259 K picks shows 0.7 minimises total P&L loss while
+# retaining more signal than lower values (0.5: -4.59u, 0.7: -4.40u, 1.0: -9.46u).
+OPP_FACTOR_DAMPING = 0.7
+
 # --- Anytime HR model (separate from the K model) ---
 # Minimum model-vs-market edge for an anytime-HR pick. Kept the same as the K
 # threshold to start. HR edges are noisier/smaller, so do NOT tune this until

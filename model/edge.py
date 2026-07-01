@@ -95,7 +95,10 @@ def find_edges(
             opp_label = f"{_abbrev(away_full)}/{_abbrev(home_full)}"
 
         recent_ip = savant.get_recent_ip(pitcher_name, pitching_df)
-        proj_ks, std_dev = project_ks(stats["k_per9"], recent_ip, opp_k_rate, league_k_rate)
+        proj_ks, std_dev = project_ks(
+            stats["k_per9"], recent_ip, opp_k_rate, league_k_rate,
+            opp_factor_damping=config.OPP_FACTOR_DAMPING,
+        )
 
         if proj_ks == 0:
             continue

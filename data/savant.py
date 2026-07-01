@@ -1,20 +1,32 @@
+import time
 from pathlib import Path
 
 import pandas as pd
 import pybaseball
 
 CACHE_DIR = Path(__file__).parent.parent / "cache"
+CACHE_TTL_SECONDS = 86400  # refresh once per day
 
 pybaseball.cache.enable()
+
+
+def _cache_is_fresh(path: Path) -> bool:
+    """True if cache file exists and was written within the TTL window."""
+    return path.exists() and (time.time() - path.stat().st_mtime) < CACHE_TTL_SECONDS
 
 
 def get_season_pitching(season: int) -> pd.DataFrame:
     cache_file = CACHE_DIR / f"pitching_{season}.pkl"
     CACHE_DIR.mkdir(exist_ok=True)
 
-    if cache_file.exists():
+    if _cache_is_fresh(cache_file):
         print(f"[savant] Loading pitching stats from cache: {cache_file.name}")
         return pd.read_pickle(cache_file)
+
+    if cache_file.exists():
+        age_days = (time.time() - cache_file.stat().st_mtime) / 86400
+        print(f"[savant] Pitching cache is {age_days:.1f}d old — refreshing...")
+        cache_file.unlink()
 
     print(f"[savant] Fetching {season} Baseball Reference pitching stats...")
     df = pybaseball.pitching_stats_bref(season)
@@ -45,11 +57,16 @@ def get_team_k_rates(season: int) -> tuple[dict[str, float], float]:
     cache_file = CACHE_DIR / f"team_batting_{season}.json"
     CACHE_DIR.mkdir(exist_ok=True)
 
-    if cache_file.exists():
+    if _cache_is_fresh(cache_file):
         print(f"[savant] Loading team K rates from cache: {cache_file.name}")
         with open(cache_file) as f:
             data = json.load(f)
         return data["team_k_rates"], data["league_k_rate"]
+
+    if cache_file.exists():
+        age_days = (time.time() - cache_file.stat().st_mtime) / 86400
+        print(f"[savant] Team K rate cache is {age_days:.1f}d old — refreshing...")
+        cache_file.unlink()
 
     print(f"[savant] Fetching {season} team batting stats from MLB Stats API...")
     # MLB Stats API: team hitting stats aggregated by team

@@ -7,12 +7,14 @@ def project_ks(
     recent_ip: list[float],
     opp_k_rate: float,
     league_k_rate: float,
+    opp_factor_damping: float = 1.0,
 ) -> tuple[float, float]:
     if not recent_ip:
         return 0.0, 0.0
 
     median_ip = statistics.median(recent_ip)
-    opp_factor = opp_k_rate / league_k_rate if league_k_rate > 0 else 1.0
+    raw_opp_factor = opp_k_rate / league_k_rate if league_k_rate > 0 else 1.0
+    opp_factor = 1.0 + (raw_opp_factor - 1.0) * opp_factor_damping
     projected_ks = (k_per9 / 9) * median_ip * opp_factor
 
     if len(recent_ip) >= 2:
