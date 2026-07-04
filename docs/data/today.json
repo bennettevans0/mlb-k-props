@@ -169,6 +169,22 @@
       "edge_val": 0.0549,
       "book": "Kalshi",
       "time": "2026-07-04T15:05:00Z"
+    },
+    {
+      "prop_type": "HR",
+      "name": "Brooks Lee",
+      "opp_pitcher": "Brendan Beck",
+      "team": "MIN",
+      "opp": "NYY",
+      "home": "NYY",
+      "away": "MIN",
+      "line": 0.5,
+      "pick": "yes",
+      "odds": "+900",
+      "model": 0.164,
+      "edge_val": 0.0688,
+      "book": "Kalshi",
+      "time": "2026-07-04T17:35:00Z"
     }
   ]
 }
