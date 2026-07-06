@@ -1,4 +1,135 @@
 {
   "date": "2026-07-06",
-  "picks": []
+  "picks": [
+    {
+      "prop_type": "K",
+      "name": "Shane Drohan",
+      "team": "MIL",
+      "opp": "STL",
+      "line": 4.5,
+      "pick": "over",
+      "odds": "+138",
+      "model": 6.6,
+      "edge_val": 0.3767,
+      "book": "Kalshi",
+      "time": "2026-07-06T23:45:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "Brandon Pfaadt",
+      "team": "ARI",
+      "opp": "SDP",
+      "line": 3.5,
+      "pick": "over",
+      "odds": "-113",
+      "model": 5.9,
+      "edge_val": 0.3119,
+      "book": "Kalshi",
+      "time": "2026-07-07T01:40:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "Dustin May",
+      "team": "STL",
+      "opp": "MIL",
+      "line": 4.5,
+      "pick": "over",
+      "odds": "+138",
+      "model": 5.0,
+      "edge_val": 0.1714,
+      "book": "Kalshi",
+      "time": "2026-07-06T23:45:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "Miles Mikolas",
+      "team": "WSN",
+      "opp": "HOU",
+      "line": 3.5,
+      "pick": "over",
+      "odds": "+144",
+      "model": 3.9,
+      "edge_val": 0.163,
+      "book": "Kalshi",
+      "time": "2026-07-06T22:45:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "Mike Burrows",
+      "team": "HOU",
+      "opp": "WSN",
+      "line": 3.5,
+      "pick": "over",
+      "odds": "-138",
+      "model": 4.5,
+      "edge_val": 0.1126,
+      "book": "Kalshi",
+      "time": "2026-07-06T22:45:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "Landen Roupp",
+      "team": "SFG",
+      "opp": "TOR",
+      "line": 4.5,
+      "pick": "over",
+      "odds": "-138",
+      "model": 5.5,
+      "edge_val": 0.1031,
+      "book": "Kalshi",
+      "time": "2026-07-07T01:45:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "Reynaldo Lopez",
+      "team": "Athletics",
+      "opp": "NYM/ATL",
+      "line": 4.5,
+      "pick": "under",
+      "odds": "-125",
+      "model": 3.7,
+      "edge_val": 0.0991,
+      "book": "FanDuel",
+      "time": "2026-07-06T23:15:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "Griffin Jax",
+      "team": "TBR",
+      "opp": "NYY",
+      "line": 5.5,
+      "pick": "under",
+      "odds": "-113",
+      "model": 5.0,
+      "edge_val": 0.0632,
+      "book": "Kalshi",
+      "time": "2026-07-06T22:40:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "Eric Lauer",
+      "team": "Los Angeles,Toronto",
+      "opp": "COL/LAD",
+      "line": 4.5,
+      "pick": "under",
+      "odds": "-127",
+      "model": 3.9,
+      "edge_val": 0.0593,
+      "book": "Kalshi",
+      "time": "2026-07-07T02:10:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "Noah Cameron",
+      "team": "KCR",
+      "opp": "PHI",
+      "line": 5.5,
+      "pick": "over",
+      "odds": "+156",
+      "model": 5.2,
+      "edge_val": 0.055,
+      "book": "Kalshi",
+      "time": "2026-07-06T18:10:00Z"
+    }
+  ]
 }
