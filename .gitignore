@@ -6,3 +6,5 @@ __pycache__/
 run_daily.ps1
 run_hr_scan.ps1
 logs/hr_scan.log
+run_scheduler.ps1
+logs/scheduler.log
