@@ -201,6 +201,22 @@
     },
     {
       "prop_type": "HR",
+      "name": "Amed Rosario",
+      "opp_pitcher": "Shota Imanaga",
+      "team": "NYY",
+      "opp": "CHC",
+      "home": "CHC",
+      "away": "NYY",
+      "line": 0.5,
+      "pick": "yes",
+      "odds": "+669",
+      "model": 0.207,
+      "edge_val": 0.0782,
+      "book": "Kalshi",
+      "time": "2026-07-31T18:20:00Z"
+    },
+    {
+      "prop_type": "HR",
       "name": "Matt Olson",
       "opp_pitcher": "Foster Griffin",
       "team": "ATL",
@@ -214,6 +230,38 @@
       "edge_val": 0.0695,
       "book": "Kalshi",
       "time": "2026-07-31T23:15:00Z"
+    },
+    {
+      "prop_type": "HR",
+      "name": "Ben Rice",
+      "opp_pitcher": "Shota Imanaga",
+      "team": "NYY",
+      "opp": "CHC",
+      "home": "CHC",
+      "away": "NYY",
+      "line": 0.5,
+      "pick": "yes",
+      "odds": "+355",
+      "model": 0.2823,
+      "edge_val": 0.0646,
+      "book": "Kalshi",
+      "time": "2026-07-31T18:20:00Z"
+    },
+    {
+      "prop_type": "HR",
+      "name": "Jos\u00e9 Caballero",
+      "opp_pitcher": "Shota Imanaga",
+      "team": "NYY",
+      "opp": "CHC",
+      "home": "CHC",
+      "away": "NYY",
+      "line": 0.5,
+      "pick": "yes",
+      "odds": "+809",
+      "model": 0.169,
+      "edge_val": 0.06,
+      "book": "Kalshi",
+      "time": "2026-07-31T18:20:00Z"
     }
   ]
 }
