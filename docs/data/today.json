@@ -185,6 +185,22 @@
     },
     {
       "prop_type": "HR",
+      "name": "Liam Hicks",
+      "opp_pitcher": "Zac Thornton",
+      "team": "MIA",
+      "opp": "NYM",
+      "home": "NYM",
+      "away": "MIA",
+      "line": 0.5,
+      "pick": "yes",
+      "odds": "+1150",
+      "model": 0.1527,
+      "edge_val": 0.0735,
+      "book": "Kalshi",
+      "time": "2026-08-01T20:10:00Z"
+    },
+    {
+      "prop_type": "HR",
       "name": "Christian Walker",
       "opp_pitcher": "Jacob deGrom",
       "team": "HOU",
@@ -198,6 +214,38 @@
       "edge_val": 0.0697,
       "book": "Kalshi",
       "time": "2026-08-01T23:10:00Z"
+    },
+    {
+      "prop_type": "HR",
+      "name": "Colt Emerson",
+      "opp_pitcher": "Connor Prielipp",
+      "team": "SEA",
+      "opp": "MIN",
+      "home": "SEA",
+      "away": "MIN",
+      "line": 0.5,
+      "pick": "yes",
+      "odds": "+1150",
+      "model": 0.1403,
+      "edge_val": 0.0611,
+      "book": "Kalshi",
+      "time": "2026-08-01T20:10:00Z"
+    },
+    {
+      "prop_type": "HR",
+      "name": "Blaze Jordan",
+      "opp_pitcher": "Kevin Gausman",
+      "team": "STL",
+      "opp": "TOR",
+      "home": "TOR",
+      "away": "STL",
+      "line": 0.5,
+      "pick": "yes",
+      "odds": "+1329",
+      "model": 0.1216,
+      "edge_val": 0.0523,
+      "book": "Kalshi",
+      "time": "2026-08-01T19:07:00Z"
     }
   ]
 }
