@@ -1,53 +1,37 @@
 {
-  "date": "2026-08-17",
+  "date": "2026-08-18",
   "picks": [
     {
       "prop_type": "HR",
-      "name": "Corbin Carroll",
-      "opp_pitcher": "Alec Gamboa",
-      "team": "ARI",
-      "opp": "BOS",
-      "home": "BOS",
-      "away": "ARI",
+      "name": "Byron Buxton",
+      "opp_pitcher": "Tyler Mahle",
+      "team": "MIN",
+      "opp": "ATL",
+      "home": "MIN",
+      "away": "ATL",
       "line": 0.5,
       "pick": "yes",
-      "odds": "+900",
-      "model": 0.1654,
-      "edge_val": 0.0663,
+      "odds": "+355",
+      "model": 0.2954,
+      "edge_val": 0.0777,
       "book": "Kalshi",
-      "time": "2026-08-17T23:10:00Z"
+      "time": "2026-08-18T23:40:00Z"
     },
     {
       "prop_type": "HR",
-      "name": "Freddie Freeman",
-      "opp_pitcher": "Tomoyuki Sugano",
-      "team": "LAD",
-      "opp": "COL",
-      "home": "COL",
-      "away": "LAD",
-      "line": 0.5,
-      "pick": "yes",
-      "odds": "+567",
-      "model": 0.21,
-      "edge_val": 0.0615,
-      "book": "Kalshi",
-      "time": "2026-08-18T00:40:00Z"
-    },
-    {
-      "prop_type": "HR",
-      "name": "Mookie Betts",
-      "opp_pitcher": "Tomoyuki Sugano",
-      "team": "LAD",
-      "opp": "COL",
-      "home": "COL",
-      "away": "LAD",
+      "name": "Christian Walker",
+      "opp_pitcher": "George Klassen",
+      "team": "HOU",
+      "opp": "LAA",
+      "home": "HOU",
+      "away": "LAA",
       "line": 0.5,
       "pick": "yes",
       "odds": "+614",
-      "model": 0.1932,
-      "edge_val": 0.0546,
+      "model": 0.1963,
+      "edge_val": 0.0577,
       "book": "Kalshi",
-      "time": "2026-08-18T00:40:00Z"
+      "time": "2026-08-19T00:10:00Z"
     }
   ]
 }

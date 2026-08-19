@@ -16319,6 +16319,54 @@
       "result": "loss",
       "units": -1.0,
       "edge": 0.0552
+    },
+    {
+      "prop_type": "HR",
+      "date": "2026-08-17",
+      "name": "Corbin Carroll",
+      "team": "ARI",
+      "opp": "BOS",
+      "book": "Kalshi",
+      "line": 0.5,
+      "pick": "yes",
+      "odds": "900",
+      "model": 0.1654,
+      "actual": 0.0,
+      "result": "loss",
+      "units": -1.0,
+      "edge": 0.0663
+    },
+    {
+      "prop_type": "HR",
+      "date": "2026-08-17",
+      "name": "Freddie Freeman",
+      "team": "LAD",
+      "opp": "COL",
+      "book": "Kalshi",
+      "line": 0.5,
+      "pick": "yes",
+      "odds": "567",
+      "model": 0.21,
+      "actual": 0.0,
+      "result": "loss",
+      "units": -1.0,
+      "edge": 0.0615
+    },
+    {
+      "prop_type": "HR",
+      "date": "2026-08-17",
+      "name": "Mookie Betts",
+      "team": "LAD",
+      "opp": "COL",
+      "book": "Kalshi",
+      "line": 0.5,
+      "pick": "yes",
+      "odds": "614",
+      "model": 0.1932,
+      "actual": 0.0,
+      "result": "loss",
+      "units": -1.0,
+      "edge": 0.0546
     }
   ],
   "series": {
@@ -16486,6 +16534,10 @@
       {
         "date": "2026-08-13",
         "cum": -224.817
+      },
+      {
+        "date": "2026-08-17",
+        "cum": -227.817
       }
     ],
     "K": [
@@ -16762,6 +16814,10 @@
       {
         "date": "2026-08-13",
         "cum": -210.03
+      },
+      {
+        "date": "2026-08-17",
+        "cum": -213.03
       }
     ]
   }
