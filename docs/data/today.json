@@ -1,37 +1,4 @@
 {
-  "date": "2026-08-18",
-  "picks": [
-    {
-      "prop_type": "HR",
-      "name": "Byron Buxton",
-      "opp_pitcher": "Tyler Mahle",
-      "team": "MIN",
-      "opp": "ATL",
-      "home": "MIN",
-      "away": "ATL",
-      "line": 0.5,
-      "pick": "yes",
-      "odds": "+355",
-      "model": 0.2954,
-      "edge_val": 0.0777,
-      "book": "Kalshi",
-      "time": "2026-08-18T23:40:00Z"
-    },
-    {
-      "prop_type": "HR",
-      "name": "Christian Walker",
-      "opp_pitcher": "George Klassen",
-      "team": "HOU",
-      "opp": "LAA",
-      "home": "HOU",
-      "away": "LAA",
-      "line": 0.5,
-      "pick": "yes",
-      "odds": "+614",
-      "model": 0.1963,
-      "edge_val": 0.0577,
-      "book": "Kalshi",
-      "time": "2026-08-19T00:10:00Z"
-    }
-  ]
+  "date": "2026-08-19",
+  "picks": []
 }
