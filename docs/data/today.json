@@ -243,6 +243,22 @@
     },
     {
       "prop_type": "HR",
+      "name": "Drake Baldwin",
+      "opp_pitcher": "Taj Bradley",
+      "team": "ATL",
+      "opp": "MIN",
+      "home": "MIN",
+      "away": "ATL",
+      "line": 0.5,
+      "pick": "yes",
+      "odds": "+525",
+      "model": 0.2227,
+      "edge_val": 0.0643,
+      "book": "Kalshi",
+      "time": "2026-08-19T17:40:00Z"
+    },
+    {
+      "prop_type": "HR",
       "name": "Jonathan Aranda",
       "opp_pitcher": "Max Scherzer",
       "team": "TBR",
@@ -256,6 +272,38 @@
       "edge_val": 0.0538,
       "book": "Kalshi",
       "time": "2026-08-19T22:40:00Z"
+    },
+    {
+      "prop_type": "HR",
+      "name": "Dillon Dingler",
+      "opp_pitcher": "Paul Skenes",
+      "team": "DET",
+      "opp": "PIT",
+      "home": "PIT",
+      "away": "DET",
+      "line": 0.5,
+      "pick": "yes",
+      "odds": "+900",
+      "model": 0.1487,
+      "edge_val": 0.0516,
+      "book": "Kalshi",
+      "time": "2026-08-19T16:35:00Z"
+    },
+    {
+      "prop_type": "HR",
+      "name": "Dominic Smith",
+      "opp_pitcher": "Taj Bradley",
+      "team": "ATL",
+      "opp": "MIN",
+      "home": "MIN",
+      "away": "ATL",
+      "line": 0.5,
+      "pick": "yes",
+      "odds": "+1011",
+      "model": 0.1402,
+      "edge_val": 0.0511,
+      "book": "Kalshi",
+      "time": "2026-08-19T17:40:00Z"
     }
   ]
 }
