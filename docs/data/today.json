@@ -117,6 +117,38 @@
       "edge_val": 0.0512,
       "book": "Kalshi",
       "time": "2026-08-25T01:40:00Z"
+    },
+    {
+      "prop_type": "HR",
+      "name": "Jacob Young",
+      "opp_pitcher": "Ryan Feltner",
+      "team": "WSN",
+      "opp": "COL",
+      "home": "WSN",
+      "away": "COL",
+      "line": 0.5,
+      "pick": "yes",
+      "odds": "+1329",
+      "model": 0.1454,
+      "edge_val": 0.0761,
+      "book": "Kalshi",
+      "time": "2026-08-24T22:45:00Z"
+    },
+    {
+      "prop_type": "HR",
+      "name": "Brady House",
+      "opp_pitcher": "Ryan Feltner",
+      "team": "WSN",
+      "opp": "COL",
+      "home": "WSN",
+      "away": "COL",
+      "line": 0.5,
+      "pick": "yes",
+      "odds": "+809",
+      "model": 0.1588,
+      "edge_val": 0.051,
+      "book": "Kalshi",
+      "time": "2026-08-24T22:45:00Z"
     }
   ]
 }
