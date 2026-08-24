@@ -1,4 +1,122 @@
 {
   "date": "2026-08-24",
-  "picks": []
+  "picks": [
+    {
+      "prop_type": "K",
+      "name": "Braxton Ashcraft",
+      "team": "PIT",
+      "opp": "SDP",
+      "line": 4.5,
+      "pick": "over",
+      "odds": "-150",
+      "model": 6.3,
+      "edge_val": 0.1687,
+      "book": "Kalshi",
+      "time": "2026-08-25T01:40:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "Zebby Matthews",
+      "team": "MIN",
+      "opp": "OAK",
+      "line": 4.5,
+      "pick": "over",
+      "odds": "+133",
+      "model": 4.8,
+      "edge_val": 0.1333,
+      "book": "Kalshi",
+      "time": "2026-08-25T01:40:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "Drew Rasmussen",
+      "team": "TBR",
+      "opp": "DET",
+      "line": 4.5,
+      "pick": "over",
+      "odds": "-143",
+      "model": 5.8,
+      "edge_val": 0.1213,
+      "book": "DraftKings",
+      "time": "2026-08-24T22:40:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "Kevin Gausman",
+      "team": "Chicago,Toronto",
+      "opp": "CHC/ARI",
+      "line": 4.5,
+      "pick": "over",
+      "odds": "-113",
+      "model": 5.2,
+      "edge_val": 0.1036,
+      "book": "Kalshi",
+      "time": "2026-08-25T01:40:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "Kumar Rocker",
+      "team": "TEX",
+      "opp": "CHW",
+      "line": 4.5,
+      "pick": "over",
+      "odds": "-117",
+      "model": 5.2,
+      "edge_val": 0.0937,
+      "book": "Kalshi",
+      "time": "2026-08-24T23:40:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "Ryan Feltner",
+      "team": "COL",
+      "opp": "WSN",
+      "line": 3.5,
+      "pick": "under",
+      "odds": "+122",
+      "model": 3.3,
+      "edge_val": 0.0931,
+      "book": "Kalshi",
+      "time": "2026-08-24T22:45:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "Robbie Ray",
+      "team": "San Diego,San Francisco",
+      "opp": "PIT/SDP",
+      "line": 5.5,
+      "pick": "under",
+      "odds": "+106",
+      "model": 5.0,
+      "edge_val": 0.0923,
+      "book": "DraftKings",
+      "time": "2026-08-25T01:40:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "Parker Messick",
+      "team": "CLE",
+      "opp": "LAA",
+      "line": 6.5,
+      "pick": "under",
+      "odds": "+138",
+      "model": 6.7,
+      "edge_val": 0.0575,
+      "book": "Kalshi",
+      "time": "2026-08-25T01:38:00Z"
+    },
+    {
+      "prop_type": "K",
+      "name": "Merrill Kelly",
+      "team": "ARI",
+      "opp": "CHC",
+      "line": 3.5,
+      "pick": "under",
+      "odds": "+133",
+      "model": 3.6,
+      "edge_val": 0.0512,
+      "book": "Kalshi",
+      "time": "2026-08-25T01:40:00Z"
+    }
+  ]
 }
