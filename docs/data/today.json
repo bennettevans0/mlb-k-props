@@ -237,6 +237,54 @@
     },
     {
       "prop_type": "HR",
+      "name": "Liam Hicks",
+      "opp_pitcher": "Troy Melton",
+      "team": "TBR",
+      "opp": "DET",
+      "home": "DET",
+      "away": "TBR",
+      "line": 0.5,
+      "pick": "yes",
+      "odds": "+1329",
+      "model": 0.179,
+      "edge_val": 0.1097,
+      "book": "Kalshi",
+      "time": "2026-08-26T17:10:00Z"
+    },
+    {
+      "prop_type": "HR",
+      "name": "Yandy D\u00edaz",
+      "opp_pitcher": "Troy Melton",
+      "team": "TBR",
+      "opp": "DET",
+      "home": "DET",
+      "away": "TBR",
+      "line": 0.5,
+      "pick": "yes",
+      "odds": "+1011",
+      "model": 0.1744,
+      "edge_val": 0.0853,
+      "book": "Kalshi",
+      "time": "2026-08-26T17:10:00Z"
+    },
+    {
+      "prop_type": "HR",
+      "name": "Christian Walker",
+      "opp_pitcher": "\u2014",
+      "team": "HOU",
+      "opp": "NYY",
+      "home": "NYY",
+      "away": "HOU",
+      "line": 0.5,
+      "pick": "yes",
+      "odds": "+669",
+      "model": 0.2069,
+      "edge_val": 0.0782,
+      "book": "Kalshi",
+      "time": "2026-08-26T23:05:00Z"
+    },
+    {
+      "prop_type": "HR",
       "name": "Matt Olson",
       "opp_pitcher": "Roki Sasaki",
       "team": "ATL",
@@ -250,6 +298,22 @@
       "edge_val": 0.0633,
       "book": "Kalshi",
       "time": "2026-08-26T23:15:00Z"
+    },
+    {
+      "prop_type": "HR",
+      "name": "Jorge Mateo",
+      "opp_pitcher": "Troy Melton",
+      "team": "TBR",
+      "opp": "DET",
+      "home": "DET",
+      "away": "TBR",
+      "line": 0.5,
+      "pick": "yes",
+      "odds": "+1150",
+      "model": 0.135,
+      "edge_val": 0.0558,
+      "book": "Kalshi",
+      "time": "2026-08-26T17:10:00Z"
     }
   ]
 }
