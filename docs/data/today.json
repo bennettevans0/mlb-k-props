@@ -123,6 +123,22 @@
     },
     {
       "prop_type": "HR",
+      "name": "Nathan Church",
+      "opp_pitcher": "Trevor Rogers",
+      "team": "STL",
+      "opp": "BAL",
+      "home": "STL",
+      "away": "BAL",
+      "line": 0.5,
+      "pick": "yes",
+      "odds": "+1900",
+      "model": 0.1137,
+      "edge_val": 0.0642,
+      "book": "Kalshi",
+      "time": "2026-08-27T18:15:00Z"
+    },
+    {
+      "prop_type": "HR",
       "name": "Drake Baldwin",
       "opp_pitcher": "Yoshinobu Yamamoto",
       "team": "ATL",
@@ -136,6 +152,38 @@
       "edge_val": 0.0639,
       "book": "Kalshi",
       "time": "2026-08-27T23:15:00Z"
+    },
+    {
+      "prop_type": "HR",
+      "name": "Blaze Jordan",
+      "opp_pitcher": "Trevor Rogers",
+      "team": "STL",
+      "opp": "BAL",
+      "home": "STL",
+      "away": "BAL",
+      "line": 0.5,
+      "pick": "yes",
+      "odds": "+1329",
+      "model": 0.1267,
+      "edge_val": 0.0574,
+      "book": "Kalshi",
+      "time": "2026-08-27T18:15:00Z"
+    },
+    {
+      "prop_type": "HR",
+      "name": "Jackson Holliday",
+      "opp_pitcher": "\u2014",
+      "team": "BAL",
+      "opp": "STL",
+      "home": "STL",
+      "away": "BAL",
+      "line": 0.5,
+      "pick": "yes",
+      "odds": "+1150",
+      "model": 0.135,
+      "edge_val": 0.0558,
+      "book": "Kalshi",
+      "time": "2026-08-27T18:15:00Z"
     },
     {
       "prop_type": "HR",
@@ -155,19 +203,19 @@
     },
     {
       "prop_type": "HR",
-      "name": "Alec Burleson",
-      "opp_pitcher": "Trevor Rogers",
-      "team": "STL",
-      "opp": "BAL",
-      "home": "STL",
-      "away": "BAL",
+      "name": "Cole Carrigg",
+      "opp_pitcher": "Jake Irvin",
+      "team": "COL",
+      "opp": "WSN",
+      "home": "WSN",
+      "away": "COL",
       "line": 0.5,
       "pick": "yes",
-      "odds": "+900",
-      "model": 0.1492,
-      "edge_val": 0.0502,
+      "odds": "+733",
+      "model": 0.1696,
+      "edge_val": 0.0508,
       "book": "Kalshi",
-      "time": "2026-08-27T18:15:00Z"
+      "time": "2026-08-27T17:05:00Z"
     }
   ]
 }
